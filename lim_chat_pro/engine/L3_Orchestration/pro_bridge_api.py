@@ -46,9 +46,10 @@ class ProBridgeAPI(LimChatBridgeAPI):
         """[UI] 사용 가능한 AI 모델 목록을 반환합니다."""
         return {
             "models": [
-                {"id": "grok-2-latest", "name": "Grok 2 (Latest)"},
-                {"id": "grok-2-vision-latest", "name": "Grok 2 Vision"},
+                {"id": "grok-4.20-0309-non-reasoning", "name": "Grok 4.20 (Non-Reasoning)"},
+                {"id": "grok-4.20-0309-reasoning", "name": "Grok 4.20 (Reasoning)"},
                 {"id": "grok-beta", "name": "Grok Beta"},
+                {"id": "grok-2-latest", "name": "Grok 2 (Latest)"},
                 {"id": "gpt-4o", "name": "GPT-4o (OpenAI)"},
                 {"id": "claude-3-5-sonnet-20241022", "name": "Claude 3.5 Sonnet (New)"}
             ]
@@ -76,7 +77,7 @@ class ProBridgeAPI(LimChatBridgeAPI):
                 new_profile = {
                     "id": target_profile_id,
                     "name": target_profile_id,
-                    "model": "grok-2-latest", # Updated to grok-2-latest for stability
+                    "model": "grok-4.20-0309-non-reasoning", # Exact verified ID from xAI API
                     "base_url": "https://api.x.ai/v1",
                     "system_prompt": "You are a fast, non-reasoning Grok-powered assistant."
                 }
