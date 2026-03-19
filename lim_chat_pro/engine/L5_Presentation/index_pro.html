@@ -925,7 +925,13 @@
                 </select>
                 <input id="p-model-custom" type="text" placeholder="Enter custom model name"
                     style="display:none; margin-top:5px;">
-                <label>API Key</label><input id="p-key" type="password">
+                <label style="display:flex; align-items:center; gap:8px;">
+                    API Key
+                    <label style="font-size:11px; font-weight:normal; display:flex; align-items:center; gap:4px; cursor:pointer;">
+                        <input type="checkbox" id="show-key-check" onchange="toggleKeyVisibility()" style="width:14px; height:14px; margin:0;"> Show Key
+                    </label>
+                </label>
+                <input id="p-key" type="password">
                 <label>Base URL</label><input id="p-url" type="text" placeholder="https://api.openai.com/v1">
                 <label>System Prompt</label><textarea id="p-sys" rows="3"></textarea>
 
@@ -1499,8 +1505,16 @@
             }
         }
 
+        function toggleKeyVisibility() {
+            const keyInput = document.getElementById('p-key');
+            const isVisible = document.getElementById('show-key-check').checked;
+            keyInput.type = isVisible ? 'text' : 'password';
+        }
+
         async function loadProfileForm(id) {
             const deleteBtn = document.getElementById('btn-delete');
+            const keyInput = document.getElementById('p-key');
+            const showKeyCheck = document.getElementById('show-key-check');
             
             // [Fix] Ensure models are loaded before setting values
             await loadModels();
@@ -1508,7 +1522,9 @@
             if (id === 'new') {
                 document.getElementById('p-name').value = '';
                 document.getElementById('p-model').value = '';
-                document.getElementById('p-key').value = '';
+                keyInput.value = '';
+                keyInput.type = 'password';
+                if (showKeyCheck) showKeyCheck.checked = false;
                 document.getElementById('p-url').value = 'https://api.openai.com/v1';
                 document.getElementById('p-sys').value = '';
                 if (deleteBtn) deleteBtn.style.display = 'none';
@@ -1518,7 +1534,10 @@
             if (profile) {
                 document.getElementById('p-name').value = profile.name || '';
                 document.getElementById('p-model').value = profile.model || '';
-                document.getElementById('p-key').value = '******';
+                // [User Request] Masking is visual only. bridge handles real key.
+                keyInput.value = '******';
+                keyInput.type = 'password';
+                if (showKeyCheck) showKeyCheck.checked = false;
                 document.getElementById('p-url').value = profile.base_url || '';
                 document.getElementById('p-sys').value = profile.system_prompt || '';
                 if (deleteBtn) deleteBtn.style.display = 'block';
