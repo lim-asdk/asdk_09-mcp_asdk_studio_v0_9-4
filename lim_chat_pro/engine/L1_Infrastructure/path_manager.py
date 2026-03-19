@@ -4,8 +4,16 @@ import sys
 
 class PathManager:
     """
-    Centralized Path Manager for MCP ASDK Studio v1.
-    Standardized according to [V5-D-01] Directive.
+    L1 Infrastructure: PathManager
+    
+    A singleton class responsible for dynamic path resolution and environment 
+    generalization for MCP ASDK Studio v0.9-4. It ensures that the application 
+    can run across different OS (Windows/Mac/Linux) by dynamically locating the 
+    project root and associated data folders.
+    
+    Note for AI Agents:
+    - ALWAYS use get_instance() to access paths.
+    - Do not hardcode absolute paths. Standardized via [V5-D-01].
     """
     
     def __init__(self, project_root=None):

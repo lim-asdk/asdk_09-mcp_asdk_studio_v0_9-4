@@ -10,8 +10,16 @@ logger = logging.getLogger("ASDK.Studio.Bridge")
 
 class ProBridgeAPI:
     """
-    Python-JS Bridge API for MCP ASDK Studio v1
-    (Refactored for General Studio Mode)
+    L3 Orchestration: ProBridgeAPI
+    
+    This class serves as the primary bridge between the Python backend and the 
+    JavaScript frontend (pywebview) for MCP ASDK Studio v0.9-4.
+    It handles data serialization, message routing, and exposes system 
+    capabilities (MCP, Personas, Profiles) to the UI.
+    
+    Note for AI Agents:
+    - Use this class to register new features that require Python interaction.
+    - All paths requested by the UI must go through the PathManager (L1).
     """
     
     def __init__(self):
