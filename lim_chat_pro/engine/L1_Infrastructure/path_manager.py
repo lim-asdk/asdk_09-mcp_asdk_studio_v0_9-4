@@ -87,6 +87,13 @@ class PathManager:
         return None
     
     @classmethod
+    def get_intent_map_file(cls):
+        """의도 감지 지도(intent_map.json) 파일 위치를 알려줍니다."""
+        if cls.active_pack:
+            return cls.IQ_PACKS_DIR / cls.active_pack / "intent_map.json"
+        return None 
+    
+    @classmethod
     def get_ui_path(cls, filename="index_pro.html"):
         # index_pro.html이 없으면 index.html로 폴백
         path = cls.L5_UI_DIR / filename

@@ -42,6 +42,17 @@ class ProBridgeAPI(LimChatBridgeAPI):
         
         logger.info(f"ProBridgeAPI [V5 Production] Ready. (Persona: {self._active_persona})")
 
+    def get_models(self):
+        """[UI] 사용 가능한 AI 모델 목록을 반환합니다."""
+        return {
+            "models": [
+                {"id": "grok-beta", "name": "Grok Beta (xAI)"},
+                {"id": "grok-2", "name": "Grok 2 (xAI)"},
+                {"id": "gpt-4o", "name": "GPT-4o (OpenAI)"},
+                {"id": "claude-3-5-sonnet-20240620", "name": "Claude 3.5 Sonnet (Anthropic)"}
+            ]
+        }
+
     def _sync_production_config(self):
         """
         Ensures the profiles match the user's screenshot exactly.
@@ -56,21 +67,29 @@ class ProBridgeAPI(LimChatBridgeAPI):
             target_profile_id = "grok-4-1-fast-non-reasoning"
             
             profiles = self._config_manager.config.get("profiles", [])
-            if not any(p["id"] == target_profile_id for p in profiles):
+            # Always ensure the default one exists and is complete
+            existing = next((p for p in profiles if p["id"] == target_profile_id), None)
+            
+            if not existing:
                 logger.info(f"[Sync] Creating '{target_profile_id}' profile from .env key.")
                 new_profile = {
                     "id": target_profile_id,
                     "name": target_profile_id,
-                    "model": "grok-beta",
+                    "model": "grok-beta", # Must not be empty
                     "base_url": "https://api.x.ai/v1",
                     "system_prompt": "You are a fast, non-reasoning Grok-powered assistant."
                 }
                 profiles.append(new_profile)
                 self._config_manager.config["profiles"] = profiles
-                self._config_manager.config["active_profile_id"] = target_profile_id
-                if grok_key:
-                    self._config_manager.save_api_key(target_profile_id, grok_key)
-                self._config_manager.save()
+            else:
+                # Fix missing model if any to avoid UI 'Fill all fields' error
+                if not existing.get("model"):
+                    existing["model"] = "grok-beta"
+            
+            self._config_manager.config["active_profile_id"] = target_profile_id
+            if grok_key:
+                self._config_manager.save_api_key(target_profile_id, grok_key)
+            self._config_manager.save()
         except Exception as e:
             logger.warning(f"Failed to sync production profile: {e}")
 
