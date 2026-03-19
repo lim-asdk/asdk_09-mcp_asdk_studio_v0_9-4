@@ -1,8 +1,6 @@
-# MCP ASDK Studio v1 (Public Beta) 🚀
-
-> **"Your High-Performance, Free Alternative to Commercial AI Desktops"**
-
-![MCP ASDK Studio Screenshot](docs/assets/screenshot.png)
+![MCP ASDK Studio Chat](docs/assets/screenshot.png)
+![MCP Server Setup](docs/assets/mcp_setup.png)
+*Professional Setup Interface: Connect local scripts or remote SSE servers with ease.*
 
 **MCP ASDK Studio is a 100% Free, Open-Source AI development workspace.**
 *Actual Product UI - Experience the premium 'Lim Chat PRO' engine for free.*
