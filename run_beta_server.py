@@ -1,9 +1,9 @@
 """
 MCP ASDK Studio v0.9-4 | Professional Beta Server Hub
-Auto-Launch Version (Target: Chrome / Web Mode)
+Auto-Launch Version (Target: Chrome / Full App UI)
 
-This script provides a unified diagnostic gateway and automatically launches the 
-Web Preview Mode in Chrome unless interrupted.
+This script bridges the Python backend logic to a standard web browser,
+allowing index_pro.html to function outside of the pywebview container.
 """
 
 import os
@@ -32,60 +32,80 @@ logger = logging.getLogger("ASDK.BetaHub")
 def clear_screen():
     os.system('cls' if os.name == 'nt' else 'clear')
 
-class ASDKVisualServer(http.server.SimpleHTTPRequestHandler):
-    def log_message(self, format, *args):
-        logger.debug("Web request: " + (format % args))
+class ASDKAppServer(http.server.SimpleHTTPRequestHandler):
+    """
+    Handles static files for the App UI and provides a basic 
+    API endpoint for Browser-to-Python communication.
+    """
+    def do_POST(self):
+        # Placeholder for future REST API integration with ProBridgeAPI
+        if self.path == '/api/call':
+            content_length = int(self.headers['Content-Length'])
+            post_data = self.rfile.read(content_length)
+            logger.info(f"[API] Browser Call Received: {post_data.decode('utf-8')}")
+            self.send_response(200)
+            self.send_header('Content-Type', 'application/json')
+            self.end_headers()
+            self.wfile.write(json.dumps({"status": "ok", "message": "Python received your command"}).encode())
+        else:
+            self.send_error(404)
 
-def start_local_server(port=8080, directory="."):
-    """Spins up a lightweight HTTP server in a separate thread."""
+    def log_message(self, format, *args):
+        logger.debug("App Server request: " + (format % args))
+
+def start_app_server(port=8080, directory="."):
+    """Spins up the App UI server."""
     os.chdir(directory)
-    handler = ASDKVisualServer
+    handler = ASDKAppServer
+    # Allow address reuse to prevent 'port in use' errors
+    socketserver.TCPServer.allow_reuse_address = True
     with socketserver.TCPServer(("", port), handler) as httpd:
-        logger.info(f"[SERVER] Active at http://localhost:{port}")
+        logger.info(f"[SERVER] App UI Bridge active at http://localhost:{port}")
         httpd.serve_forever()
 
 def check_environment():
     logger.info("--- Phase 1: Environment Integrity Check ---")
     root = Path(__file__).parent.absolute()
-    required_dirs = ["user_data", "lim_chat_pro", "docs", "keys"]
+    required = ["user_data", "lim_chat_pro", "lim_chat_pro/engine/L5_Presentation/index_pro.html"]
     
     all_pass = True
-    for d in required_dirs:
-        if (root / d).exists():
-            logger.info(f"[PASS] Directory found: {d}")
+    for item in required:
+        if (root / item).exists():
+            logger.info(f"[PASS] Essential Found: {item}")
         else:
-            logger.warning(f"[FAIL] Directory MISSING: {d}")
-            all_pass = False
-            
-    settings_path = root / "user_data" / "profiles" / "default.json"
-    if settings_path.exists():
-        try:
-            with open(settings_path, 'r', encoding='utf-8') as f:
-                data = json.load(f)
-                logger.info(f"[PASS] Settings Loaded: {data.get('model', 'Unknown')}")
-        except Exception as e:
-            logger.error(f"[FAIL] Settings Corrupted: {e}")
+            logger.warning(f"[FAIL] MISSING: {item}")
             all_pass = False
     return all_pass
 
-def launch_web():
-    logger.info("--- Launching Web Mode (Chrome/Auto) ---")
+def launch_web_app():
+    """Starts the server and opens the ACTUAL App UI in Chrome."""
+    logger.info("--- Launching App in Browser (Chrome/Auto) ---")
+    
+    # Target directory is the Presentation layer for L5 assets
+    app_root = Path(__file__).parent.absolute()
+    
     server_thread = threading.Thread(
-        target=start_local_server, 
-        args=(8080, str(Path(__file__).parent)),
+        target=start_app_server, 
+        args=(8080, str(app_root)),
         daemon=True
     )
     server_thread.start()
     time.sleep(1)
     
     try:
-        url = "http://localhost:8080/docs/index.html"
+        # POINT TO THE REAL APP UI, NOT THE LANDING PAGE
+        url = "http://localhost:8080/lim_chat_pro/engine/L5_Presentation/index_pro.html"
         webbrowser.open(url)
-        logger.info(f"[SUCCESS] Browser launched at {url}")
-        print("\n[!] Web Server is RUNNING. Press Ctrl+C to stop.")
+        logger.info(f"[SUCCESS] App UI launched in Browser at {url}")
+        print("\n" + "="*50)
+        print("  SERVER MODE ACTIVE")
+        print("  Logic Bridge: Enabled (Experimental)")
+        print("  Target UI: index_pro.html")
+        print("="*50)
+        print("\n[!] Press Ctrl+C to terminate the server hub.")
         while True: time.sleep(1)
     except KeyboardInterrupt:
-        logger.info("Server shut down.")
+        logger.info("Hub shut down.")
         sys.exit(0)
     except Exception as e:
         logger.error(f"[ERROR] Launch failed: {e}")
@@ -93,22 +113,21 @@ def launch_web():
 def main():
     clear_screen()
     print("====================================================")
-    print("   MCP ASDK Studio v0.9-4 | GLOBAL BETA SERVER HUB")
-    print("   Auto-Launch Target: Chrome / Web Mode")
+    print("   MCP ASDK Studio v0.9-4 | BETA SERVER HUB")
+    print("   Target: Integrated App Experience (Chrome)")
     print("====================================================\n")
     
     if not check_environment():
-        print("\n[!] CRITICAL: Environment check fails. Check logs.")
+        print("\n[!] CRITICAL: Structure check fails. Check logs.")
         input("Press Enter to bypass, or Ctrl+C to abort...")
 
-    print("\n[EXECUTION]")
-    print("1. Web Server Mode (Default - AUTO-LAUNCHING in 3s)")
-    print("2. Desktop App Mode (pywebview)")
+    print("\n[SELECT MODE]")
+    print("1. Launch App in Browser (Default - AUTO in 3s)")
+    print("2. Launch Native Desktop (pywebview)")
     print("3. Exit")
 
-    # Countdown Logic
     import msvcrt
-    print(f"\nASDK-HUB >> Starting Chrome Preview... (Press '2' for Desktop, '3' to Exit)", end="", flush=True)
+    print(f"\nASDK-HUB >> Starting App Server... (Press '2' for Desktop)", end="", flush=True)
     
     cmd = None
     start_time = time.time()
@@ -119,15 +138,14 @@ def main():
         time.sleep(0.1)
 
     if cmd is None or cmd == '' or cmd == '1':
-        launch_web()
+        launch_web_app()
     elif cmd == '2':
-        logger.info("Switching to Desktop Mode...")
+        logger.info("Starting Desktop...")
         subprocess.Popen([sys.executable, "main.py"])
-        logger.info("Desktop process started.")
     elif cmd == '3':
         sys.exit(0)
     else:
-        launch_web()
+        launch_web_app()
 
 if __name__ == "__main__":
     main()
