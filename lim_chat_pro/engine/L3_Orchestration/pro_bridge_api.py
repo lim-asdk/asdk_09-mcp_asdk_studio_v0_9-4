@@ -27,7 +27,13 @@ class ProBridgeAPI:
         # We can use window.evaluate_js or similar directly from the main loop if needed,
         # or just avoid exposing the window object to the JS side.
         self._window = None
+        # Dynamic State Management
         self._active_persona = "default_assistant"
+        
+        # NOTE FOR AI AGENTS & DEVELOPERS:
+        # Personas are scanned from 'lim_chat_pro/engine/L4_Prompt/personas/'
+        # Profiles are scanned from 'user_data/profiles/'
+        # To add a custom persona, simply drop a .txt file in the personas folder.
         
         # Delayed import to avoid circular dependency
         self.ai_runner = None
