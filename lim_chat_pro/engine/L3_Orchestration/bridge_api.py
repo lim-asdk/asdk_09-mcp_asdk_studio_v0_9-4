@@ -6,6 +6,8 @@
 import time
 import logging
 import threading
+import sys
+from pathlib import Path
 from typing import Dict
 import ctypes
 from ctypes import wintypes
@@ -465,19 +467,14 @@ class LimChatBridgeAPI:
                      api_key = os.environ.get("OPENAI_API_KEY", "")
                 
                 # Default meta (Emergency Fallback)
-                model = "gpt-4o" # Modern default
+                model = "gpt-4o" 
                 base_url = None
-                
-                # [Fix] Use a more robust check for xAI/Grok fallbacks
-                if "xai-tCXS" in str(api_key): # Restored legacy key fingerprint
-                    model = "grok-4-1-fast-non-reasoning"
-                    base_url = "https://api.x.ai/v1"
                 
                 # Try to get meta from active profile if possible
                 if api_key:
                     meta = self._config_manager.get_profile_meta(active_id)
                     if meta:
-                        model = meta.get("model", model)
+                        model = meta.get("model") or model
                         base_url = meta.get("base_url") or base_url
 
                 if not api_key:
@@ -621,12 +618,20 @@ class LimChatBridgeAPI:
                     k, v = line.split('=', 1)
                     headers[k.strip()] = v.strip()
 
+        # Preserve existing env from JSON if available
+        existing_conf = self._config_manager.config.get("mcpServers", {}).get(name, {})
+        env = existing_conf.get("env", {}).copy()
+        
+        # Enforce essential flags
+        env["PYTHONUNBUFFERED"] = "1"
+        env["GR_BOOT_SILENT"] = "1"
+
         server_data = {
             "name": display_name or name, # 표시 이름 (없으면 ID 사용)
             "transport": transport,  # stdio, sse, http
             "command": command,
             "args": args,
-            "env": {"PYTHONUNBUFFERED": "1"}, # stdio 전용이지만 유지
+            "env": env,
             "url": url,
             "headers": headers
         }
@@ -702,12 +707,22 @@ class LimChatBridgeAPI:
                     k, v = line.split('=', 1)
                     headers[k.strip()] = v.strip()
 
+        # Preserve existing env from JSON if available (for test_temp)
+        # For temporary tests, we might not have a saved config yet, 
+        # but if we do, we should use its env.
+        existing_conf = self._config_manager.config.get("mcpServers", {}).get(display_name or "Test Server", {})
+        env = existing_conf.get("env", {}).copy()
+        
+        # Enforce essential flags
+        env["PYTHONUNBUFFERED"] = "1"
+        env["GR_BOOT_SILENT"] = "1"
+
         temp_config = {
             "name": display_name or "Test Server",
             "transport": transport,
             "command": command,
             "args": args,
-            "env": {"PYTHONUNBUFFERED": "1"},
+            "env": env,
             "url": url,
             "headers": headers
         }

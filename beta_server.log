@@ -1,3 +1,226 @@
-2026-03-19 23:34:18,041 [INFO] [PORT] Killing previous hub process (PID: 16480)...
-2026-03-19 23:34:20,519 [INFO] Starting Hub Server for Browser Mode...
-2026-03-19 23:34:21,483 [INFO] [SUCCESS] Hub ready at http://localhost:2026/lim_chat_pro/engine/L5_Presentation/index_pro.html
+2026-03-20 03:36:48,170 [WARNING] Pydantic not available. Using legacy mode.
+2026-03-20 03:36:48,178 [INFO] BridgeAPI initialized (Config: config_pro.json)
+2026-03-20 03:36:48,205 [INFO] API key saved to: C:\program_files\Lim Workspace\mcp_asdk_studio_v1\user_data\profiles\grok-4-1-fast-non-reasoning.json
+2026-03-20 03:36:48,206 [INFO] ProBridgeAPI [V5 Production] Ready. (Persona: emergency_assistant)
+2026-03-20 03:36:48,492 [INFO] [PORT] Releasing port 2026 (PID: 8912)...
+2026-03-20 03:36:50,470 [INFO] Activating L3 Hub Bridge...
+2026-03-20 03:36:51,556 [INFO] [AllOne_Total_V2] Connect Success. Tools: 50
+2026-03-20 03:36:52,003 [ERROR] [stack_helper_api] Session Init Failed: Connection closed
+2026-03-20 03:36:52,011 [WARNING] [stack_helper_api] Session ended, will retry.
+2026-03-20 03:36:52,090 [INFO] [SUCCESS] Web Studio Hub is Live at http://localhost:2026/lim_chat_pro/engine/L5_Presentation/index_pro.html
+2026-03-20 03:36:56,955 [ERROR] [stack_helper_api] Session Init Failed: Connection closed
+2026-03-20 03:36:56,956 [WARNING] [stack_helper_api] Session ended, will retry.
+2026-03-20 03:37:04,193 [ERROR] [stack_helper_api] Session Init Failed: Connection closed
+2026-03-20 03:37:04,210 [WARNING] [stack_helper_api] Session ended, will retry.
+2026-03-20 03:37:14,814 [ERROR] [stack_helper_api] Session Init Failed: Connection closed
+2026-03-20 03:37:14,818 [WARNING] [stack_helper_api] Session ended, will retry.
+2026-03-20 03:37:34,654 [ERROR] [stack_helper_api] Session Init Failed: Connection closed
+2026-03-20 03:37:34,679 [WARNING] [stack_helper_api] Session ended, will retry.
+2026-03-20 03:38:18,120 [ERROR] [stack_helper_api] Session Init Failed: Connection closed
+2026-03-20 03:38:18,182 [WARNING] [stack_helper_api] Session ended, will retry.
+2026-03-20 03:38:55,142 [ERROR] [stack_helper_api] Session Init Failed: Connection closed
+2026-03-20 03:38:55,159 [WARNING] [stack_helper_api] Session ended, will retry.
+2026-03-20 03:39:31,158 [ERROR] [stack_helper_api] Session Init Failed: Connection closed
+2026-03-20 03:39:31,160 [WARNING] [stack_helper_api] Session ended, will retry.
+2026-03-20 03:40:03,923 [ERROR] [stack_helper_api] Session Init Failed: Connection closed
+2026-03-20 03:40:03,924 [WARNING] [stack_helper_api] Session ended, will retry.
+2026-03-20 03:40:38,055 [ERROR] [stack_helper_api] Session Init Failed: Connection closed
+2026-03-20 03:40:38,075 [WARNING] [stack_helper_api] Session ended, will retry.
+2026-03-20 03:41:11,029 [ERROR] [stack_helper_api] Session Init Failed: Connection closed
+2026-03-20 03:41:11,031 [WARNING] [stack_helper_api] Session ended, will retry.
+2026-03-20 03:41:44,291 [ERROR] [stack_helper_api] Session Init Failed: Connection closed
+2026-03-20 03:41:44,294 [WARNING] [stack_helper_api] Session ended, will retry.
+2026-03-20 03:42:16,867 [ERROR] [stack_helper_api] Session Init Failed: Connection closed
+2026-03-20 03:42:16,869 [WARNING] [stack_helper_api] Session ended, will retry.
+2026-03-20 03:42:49,610 [ERROR] [stack_helper_api] Session Init Failed: Connection closed
+2026-03-20 03:42:49,612 [WARNING] [stack_helper_api] Session ended, will retry.
+2026-03-20 03:43:22,190 [ERROR] [stack_helper_api] Session Init Failed: Connection closed
+2026-03-20 03:43:22,192 [WARNING] [stack_helper_api] Session ended, will retry.
+2026-03-20 03:43:55,094 [ERROR] [stack_helper_api] Session Init Failed: Connection closed
+2026-03-20 03:43:55,096 [WARNING] [stack_helper_api] Session ended, will retry.
+2026-03-20 03:44:27,822 [ERROR] [stack_helper_api] Session Init Failed: Connection closed
+2026-03-20 03:44:27,824 [WARNING] [stack_helper_api] Session ended, will retry.
+2026-03-20 03:45:00,338 [ERROR] [stack_helper_api] Session Init Failed: Connection closed
+2026-03-20 03:45:00,339 [WARNING] [stack_helper_api] Session ended, will retry.
+2026-03-20 03:45:33,771 [ERROR] [stack_helper_api] Session Init Failed: Connection closed
+2026-03-20 03:45:33,775 [WARNING] [stack_helper_api] Session ended, will retry.
+2026-03-20 03:46:06,971 [ERROR] [stack_helper_api] Session Init Failed: Connection closed
+2026-03-20 03:46:06,973 [WARNING] [stack_helper_api] Session ended, will retry.
+2026-03-20 03:46:39,716 [ERROR] [stack_helper_api] Session Init Failed: Connection closed
+2026-03-20 03:46:39,718 [WARNING] [stack_helper_api] Session ended, will retry.
+2026-03-20 03:47:13,468 [ERROR] [stack_helper_api] Session Init Failed: Connection closed
+2026-03-20 03:47:13,473 [WARNING] [stack_helper_api] Session ended, will retry.
+2026-03-20 03:47:46,232 [ERROR] [stack_helper_api] Session Init Failed: Connection closed
+2026-03-20 03:47:46,236 [WARNING] [stack_helper_api] Session ended, will retry.
+2026-03-20 03:48:18,915 [ERROR] [stack_helper_api] Session Init Failed: Connection closed
+2026-03-20 03:48:18,917 [WARNING] [stack_helper_api] Session ended, will retry.
+2026-03-20 03:48:51,862 [ERROR] [stack_helper_api] Session Init Failed: Connection closed
+2026-03-20 03:48:51,864 [WARNING] [stack_helper_api] Session ended, will retry.
+2026-03-20 03:49:24,990 [ERROR] [stack_helper_api] Session Init Failed: Connection closed
+2026-03-20 03:49:24,993 [WARNING] [stack_helper_api] Session ended, will retry.
+2026-03-20 03:49:57,703 [ERROR] [stack_helper_api] Session Init Failed: Connection closed
+2026-03-20 03:49:57,706 [WARNING] [stack_helper_api] Session ended, will retry.
+2026-03-20 03:50:32,640 [ERROR] [stack_helper_api] Session Init Failed: Connection closed
+2026-03-20 03:50:32,674 [WARNING] [stack_helper_api] Session ended, will retry.
+2026-03-20 03:51:05,179 [ERROR] [stack_helper_api] Session Init Failed: Connection closed
+2026-03-20 03:51:05,181 [WARNING] [stack_helper_api] Session ended, will retry.
+2026-03-20 03:51:37,740 [ERROR] [stack_helper_api] Session Init Failed: Connection closed
+2026-03-20 03:51:37,742 [WARNING] [stack_helper_api] Session ended, will retry.
+2026-03-20 03:52:10,274 [ERROR] [stack_helper_api] Session Init Failed: Connection closed
+2026-03-20 03:52:10,277 [WARNING] [stack_helper_api] Session ended, will retry.
+2026-03-20 03:52:42,900 [ERROR] [stack_helper_api] Session Init Failed: Connection closed
+2026-03-20 03:52:42,902 [WARNING] [stack_helper_api] Session ended, will retry.
+2026-03-20 03:53:15,606 [ERROR] [stack_helper_api] Session Init Failed: Connection closed
+2026-03-20 03:53:15,608 [WARNING] [stack_helper_api] Session ended, will retry.
+2026-03-20 03:53:48,686 [ERROR] [stack_helper_api] Session Init Failed: Connection closed
+2026-03-20 03:53:48,689 [WARNING] [stack_helper_api] Session ended, will retry.
+2026-03-20 03:54:22,200 [ERROR] [stack_helper_api] Session Init Failed: Connection closed
+2026-03-20 03:54:22,214 [WARNING] [stack_helper_api] Session ended, will retry.
+2026-03-20 03:54:54,900 [ERROR] [stack_helper_api] Session Init Failed: Connection closed
+2026-03-20 03:54:54,902 [WARNING] [stack_helper_api] Session ended, will retry.
+2026-03-20 03:55:27,501 [ERROR] [stack_helper_api] Session Init Failed: Connection closed
+2026-03-20 03:55:27,502 [WARNING] [stack_helper_api] Session ended, will retry.
+2026-03-20 03:56:00,320 [ERROR] [stack_helper_api] Session Init Failed: Connection closed
+2026-03-20 03:56:00,322 [WARNING] [stack_helper_api] Session ended, will retry.
+2026-03-20 03:56:32,695 [ERROR] [stack_helper_api] Session Init Failed: Connection closed
+2026-03-20 03:56:32,697 [WARNING] [stack_helper_api] Session ended, will retry.
+2026-03-20 03:57:05,148 [ERROR] [stack_helper_api] Session Init Failed: Connection closed
+2026-03-20 03:57:05,150 [WARNING] [stack_helper_api] Session ended, will retry.
+2026-03-20 03:57:37,788 [ERROR] [stack_helper_api] Session Init Failed: Connection closed
+2026-03-20 03:57:37,790 [WARNING] [stack_helper_api] Session ended, will retry.
+2026-03-20 03:58:10,518 [ERROR] [stack_helper_api] Session Init Failed: Connection closed
+2026-03-20 03:58:10,521 [WARNING] [stack_helper_api] Session ended, will retry.
+2026-03-20 03:58:43,075 [ERROR] [stack_helper_api] Session Init Failed: Connection closed
+2026-03-20 03:58:43,077 [WARNING] [stack_helper_api] Session ended, will retry.
+2026-03-20 03:59:15,535 [ERROR] [stack_helper_api] Session Init Failed: Connection closed
+2026-03-20 03:59:15,536 [WARNING] [stack_helper_api] Session ended, will retry.
+2026-03-20 03:59:49,266 [ERROR] [stack_helper_api] Session Init Failed: Connection closed
+2026-03-20 03:59:49,274 [WARNING] [stack_helper_api] Session ended, will retry.
+2026-03-20 04:00:27,428 [ERROR] [stack_helper_api] Session Init Failed: Connection closed
+2026-03-20 04:00:27,437 [WARNING] [stack_helper_api] Session ended, will retry.
+2026-03-20 04:01:00,433 [ERROR] [stack_helper_api] Session Init Failed: Connection closed
+2026-03-20 04:01:00,436 [WARNING] [stack_helper_api] Session ended, will retry.
+2026-03-20 04:01:33,709 [ERROR] [stack_helper_api] Session Init Failed: Connection closed
+2026-03-20 04:01:33,711 [WARNING] [stack_helper_api] Session ended, will retry.
+2026-03-20 04:02:09,627 [ERROR] [stack_helper_api] Session Init Failed: Connection closed
+2026-03-20 04:02:09,646 [WARNING] [stack_helper_api] Session ended, will retry.
+2026-03-20 04:02:42,755 [ERROR] [stack_helper_api] Session Init Failed: Connection closed
+2026-03-20 04:02:42,757 [WARNING] [stack_helper_api] Session ended, will retry.
+2026-03-20 04:03:15,571 [ERROR] [stack_helper_api] Session Init Failed: Connection closed
+2026-03-20 04:03:15,576 [WARNING] [stack_helper_api] Session ended, will retry.
+2026-03-20 04:03:50,501 [ERROR] [stack_helper_api] Session Init Failed: Connection closed
+2026-03-20 04:03:50,520 [WARNING] [stack_helper_api] Session ended, will retry.
+2026-03-20 04:04:23,524 [ERROR] [stack_helper_api] Session Init Failed: Connection closed
+2026-03-20 04:04:23,528 [WARNING] [stack_helper_api] Session ended, will retry.
+2026-03-20 04:04:56,709 [ERROR] [stack_helper_api] Session Init Failed: Connection closed
+2026-03-20 04:04:56,712 [WARNING] [stack_helper_api] Session ended, will retry.
+2026-03-20 04:05:29,870 [ERROR] [stack_helper_api] Session Init Failed: Connection closed
+2026-03-20 04:05:29,872 [WARNING] [stack_helper_api] Session ended, will retry.
+2026-03-20 04:06:02,589 [ERROR] [stack_helper_api] Session Init Failed: Connection closed
+2026-03-20 04:06:02,594 [WARNING] [stack_helper_api] Session ended, will retry.
+2026-03-20 04:06:35,857 [ERROR] [stack_helper_api] Session Init Failed: Connection closed
+2026-03-20 04:06:35,858 [WARNING] [stack_helper_api] Session ended, will retry.
+2026-03-20 04:07:09,189 [ERROR] [stack_helper_api] Session Init Failed: Connection closed
+2026-03-20 04:07:09,205 [WARNING] [stack_helper_api] Session ended, will retry.
+2026-03-20 04:07:42,269 [ERROR] [stack_helper_api] Session Init Failed: Connection closed
+2026-03-20 04:07:42,271 [WARNING] [stack_helper_api] Session ended, will retry.
+2026-03-20 04:08:16,435 [ERROR] [stack_helper_api] Session Init Failed: Connection closed
+2026-03-20 04:08:16,454 [WARNING] [stack_helper_api] Session ended, will retry.
+2026-03-20 04:08:48,999 [ERROR] [stack_helper_api] Session Init Failed: Connection closed
+2026-03-20 04:08:49,001 [WARNING] [stack_helper_api] Session ended, will retry.
+2026-03-20 04:09:23,778 [ERROR] [stack_helper_api] Session Init Failed: Connection closed
+2026-03-20 04:09:23,780 [WARNING] [stack_helper_api] Session ended, will retry.
+2026-03-20 04:09:56,428 [ERROR] [stack_helper_api] Session Init Failed: Connection closed
+2026-03-20 04:09:56,439 [WARNING] [stack_helper_api] Session ended, will retry.
+2026-03-20 04:10:29,801 [ERROR] [stack_helper_api] Session Init Failed: Connection closed
+2026-03-20 04:10:29,821 [WARNING] [stack_helper_api] Session ended, will retry.
+2026-03-20 04:11:08,265 [ERROR] [stack_helper_api] Session Init Failed: Connection closed
+2026-03-20 04:11:08,278 [WARNING] [stack_helper_api] Session ended, will retry.
+2026-03-20 04:11:44,331 [ERROR] [stack_helper_api] Session Init Failed: Connection closed
+2026-03-20 04:11:44,355 [WARNING] [stack_helper_api] Session ended, will retry.
+2026-03-20 04:12:47,019 [ERROR] [stack_helper_api] Session Init Failed: Connection closed
+2026-03-20 04:12:47,021 [WARNING] [stack_helper_api] Session ended, will retry.
+2026-03-20 04:13:26,227 [ERROR] [stack_helper_api] Session Init Failed: Connection closed
+2026-03-20 04:13:26,305 [WARNING] [stack_helper_api] Session ended, will retry.
+2026-03-20 04:14:05,262 [ERROR] [stack_helper_api] Session Init Failed: Connection closed
+2026-03-20 04:14:05,272 [WARNING] [stack_helper_api] Session ended, will retry.
+2026-03-20 04:14:39,170 [ERROR] [stack_helper_api] Session Init Failed: Connection closed
+2026-03-20 04:14:39,174 [WARNING] [stack_helper_api] Session ended, will retry.
+2026-03-20 04:15:21,334 [ERROR] [stack_helper_api] Session Init Failed: Connection closed
+2026-03-20 04:15:21,381 [WARNING] [stack_helper_api] Session ended, will retry.
+2026-03-20 04:15:55,684 [ERROR] [stack_helper_api] Session Init Failed: Connection closed
+2026-03-20 04:15:55,695 [WARNING] [stack_helper_api] Session ended, will retry.
+2026-03-20 04:16:29,655 [ERROR] [stack_helper_api] Session Init Failed: Connection closed
+2026-03-20 04:16:29,666 [WARNING] [stack_helper_api] Session ended, will retry.
+2026-03-20 04:17:03,742 [ERROR] [stack_helper_api] Session Init Failed: Connection closed
+2026-03-20 04:17:03,754 [WARNING] [stack_helper_api] Session ended, will retry.
+2026-03-20 04:17:36,913 [ERROR] [stack_helper_api] Session Init Failed: Connection closed
+2026-03-20 04:17:36,928 [WARNING] [stack_helper_api] Session ended, will retry.
+2026-03-20 04:18:12,557 [ERROR] [stack_helper_api] Session Init Failed: Connection closed
+2026-03-20 04:18:12,563 [WARNING] [stack_helper_api] Session ended, will retry.
+2026-03-20 04:19:27,829 [ERROR] [stack_helper_api] Session Init Failed: Connection closed
+2026-03-20 04:19:28,124 [WARNING] [stack_helper_api] Session ended, will retry.
+2026-03-20 04:20:46,946 [ERROR] [stack_helper_api] Session Init Failed: Connection closed
+2026-03-20 04:20:47,080 [WARNING] [stack_helper_api] Session ended, will retry.
+2026-03-20 04:21:51,643 [ERROR] [stack_helper_api] Session Init Failed: Connection closed
+2026-03-20 04:21:51,656 [WARNING] [stack_helper_api] Session ended, will retry.
+2026-03-20 04:22:24,734 [ERROR] [stack_helper_api] Session Init Failed: Connection closed
+2026-03-20 04:22:24,736 [WARNING] [stack_helper_api] Session ended, will retry.
+2026-03-20 04:24:23,753 [ERROR] [stack_helper_api] Session Init Failed: Connection closed
+2026-03-20 04:24:24,130 [WARNING] [stack_helper_api] Session ended, will retry.
+2026-03-20 04:24:57,698 [ERROR] [stack_helper_api] Session Init Failed: Connection closed
+2026-03-20 04:24:57,701 [WARNING] [stack_helper_api] Session ended, will retry.
+2026-03-20 04:25:30,548 [ERROR] [stack_helper_api] Session Init Failed: Connection closed
+2026-03-20 04:25:30,563 [WARNING] [stack_helper_api] Session ended, will retry.
+2026-03-20 04:26:06,688 [ERROR] [stack_helper_api] Session Init Failed: Connection closed
+2026-03-20 04:26:06,690 [WARNING] [stack_helper_api] Session ended, will retry.
+2026-03-20 04:26:44,584 [ERROR] [stack_helper_api] Session Init Failed: Connection closed
+2026-03-20 04:26:44,585 [WARNING] [stack_helper_api] Session ended, will retry.
+2026-03-20 04:27:27,030 [ERROR] [stack_helper_api] Session Init Failed: Connection closed
+2026-03-20 04:27:27,053 [WARNING] [stack_helper_api] Session ended, will retry.
+2026-03-20 04:28:01,703 [ERROR] [stack_helper_api] Session Init Failed: Connection closed
+2026-03-20 04:28:01,705 [WARNING] [stack_helper_api] Session ended, will retry.
+2026-03-20 04:29:02,386 [ERROR] [stack_helper_api] Session Init Failed: Connection closed
+2026-03-20 04:29:02,473 [WARNING] [stack_helper_api] Session ended, will retry.
+2026-03-20 04:29:37,685 [ERROR] [stack_helper_api] Session Init Failed: Connection closed
+2026-03-20 04:29:37,688 [WARNING] [stack_helper_api] Session ended, will retry.
+2026-03-20 04:30:11,545 [ERROR] [stack_helper_api] Session Init Failed: Connection closed
+2026-03-20 04:30:11,547 [WARNING] [stack_helper_api] Session ended, will retry.
+2026-03-20 04:30:45,300 [ERROR] [stack_helper_api] Session Init Failed: Connection closed
+2026-03-20 04:30:45,308 [WARNING] [stack_helper_api] Session ended, will retry.
+2026-03-20 04:31:41,229 [ERROR] [stack_helper_api] Session Init Failed: Connection closed
+2026-03-20 04:31:41,276 [WARNING] [stack_helper_api] Session ended, will retry.
+2026-03-20 04:32:16,715 [ERROR] [stack_helper_api] Session Init Failed: Connection closed
+2026-03-20 04:32:16,770 [WARNING] [stack_helper_api] Session ended, will retry.
+2026-03-20 04:33:05,044 [ERROR] [stack_helper_api] Session Init Failed: Connection closed
+2026-03-20 04:33:05,078 [WARNING] [stack_helper_api] Session ended, will retry.
+2026-03-20 04:33:41,198 [ERROR] [stack_helper_api] Session Init Failed: Connection closed
+2026-03-20 04:33:41,201 [WARNING] [stack_helper_api] Session ended, will retry.
+2026-03-20 04:34:22,797 [ERROR] [stack_helper_api] Session Init Failed: Connection closed
+2026-03-20 04:34:22,899 [WARNING] [stack_helper_api] Session ended, will retry.
+2026-03-20 04:34:56,424 [ERROR] [stack_helper_api] Session Init Failed: Connection closed
+2026-03-20 04:34:56,465 [WARNING] [stack_helper_api] Session ended, will retry.
+2026-03-20 04:36:05,435 [ERROR] [stack_helper_api] Session Init Failed: Connection closed
+2026-03-20 04:36:05,598 [WARNING] [stack_helper_api] Session ended, will retry.
+2026-03-20 04:36:40,507 [ERROR] [stack_helper_api] Session Init Failed: Connection closed
+2026-03-20 04:36:40,692 [WARNING] [stack_helper_api] Session ended, will retry.
+2026-03-20 04:37:14,590 [ERROR] [stack_helper_api] Session Init Failed: Connection closed
+2026-03-20 04:37:14,611 [WARNING] [stack_helper_api] Session ended, will retry.
+2026-03-20 04:38:37,588 [ERROR] [stack_helper_api] Session Init Failed: Connection closed
+2026-03-20 04:38:37,619 [WARNING] [stack_helper_api] Session ended, will retry.
+2026-03-20 04:39:56,621 [ERROR] [stack_helper_api] Session Init Failed: Connection closed
+2026-03-20 04:39:56,790 [WARNING] [stack_helper_api] Session ended, will retry.
+2026-03-20 04:40:53,288 [ERROR] [stack_helper_api] Session Init Failed: Connection closed
+2026-03-20 04:40:53,355 [WARNING] [stack_helper_api] Session ended, will retry.
+2026-03-20 04:41:27,455 [ERROR] [stack_helper_api] Session Init Failed: Connection closed
+2026-03-20 04:41:27,472 [WARNING] [stack_helper_api] Session ended, will retry.
+2026-03-20 04:42:01,524 [ERROR] [stack_helper_api] Session Init Failed: Connection closed
+2026-03-20 04:42:01,526 [WARNING] [stack_helper_api] Session ended, will retry.
+2026-03-20 04:42:36,855 [ERROR] [stack_helper_api] Session Init Failed: Connection closed
+2026-03-20 04:42:36,865 [WARNING] [stack_helper_api] Session ended, will retry.
+2026-03-20 04:43:11,677 [ERROR] [stack_helper_api] Session Init Failed: Connection closed
+2026-03-20 04:43:11,682 [WARNING] [stack_helper_api] Session ended, will retry.
+2026-03-20 04:43:45,106 [ERROR] [stack_helper_api] Session Init Failed: Connection closed
+2026-03-20 04:43:45,127 [WARNING] [stack_helper_api] Session ended, will retry.
+2026-03-20 04:44:18,971 [ERROR] [stack_helper_api] Session Init Failed: Connection closed
+2026-03-20 04:44:18,974 [WARNING] [stack_helper_api] Session ended, will retry.
