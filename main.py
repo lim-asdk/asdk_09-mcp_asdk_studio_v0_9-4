@@ -14,25 +14,10 @@ import webview
 import logging
 from pathlib import Path
 
-# 1. 경로 설정 (Path Setup)
-def setup_paths():
-    """
-    현재 프로젝트 루트(mcp_asdk_studio_v1)를 기반으로 패키지 및 엔진 경로를 등록합니다.
-    """
-    project_root = Path(__file__).resolve().parent
-    package_dir = project_root / "lim_chat_pro"
-    engine_dir = package_dir / "engine"
-    
-    # 프로젝트 루트 등록
-    if str(project_root) not in sys.path:
-        sys.path.insert(0, str(project_root))
-        
-    # 엔진(두뇌) 폴더 등록
-    if str(engine_dir) not in sys.path:
-        sys.path.insert(0, str(engine_dir))
-        print(f"[Launcher] ASDK Studio 엔진 경로 등록 완료: {engine_dir}")
-
-setup_paths()
+# Load engine and paths via PathManager
+from lim_chat_pro.engine.L1_Infrastructure.path_manager import PathManager
+pm = PathManager()
+pm.add_engine_to_sys_path()
 
 # 엔진 로드 후 부품 불러오기
 from L3_Orchestration.pro_bridge_api import ProBridgeAPI  # Python <-> JS 연결 다리
@@ -50,13 +35,15 @@ def main():
     # ----------------------------------------------------------------
     # 단계 1: 연결 다리(Bridge API) 설치
     # ----------------------------------------------------------------
-    api = ProBridgeAPI()
 
     # ----------------------------------------------------------------
     # 단계 2: 화면(UI) 준비
     # ----------------------------------------------------------------
-    # 공용 UI 파일인 index_pro.html을 로드합니다.
-    ui_path = PathManager.get_ui_path("index_pro.html")
+    # 2. 브릿지 설정 (Bridge Setup)
+    api = ProBridgeAPI()
+    
+    # 3. UI 경로 획득
+    ui_path = pm.get_ui_path("index_pro.html")
     
     start_url = ""
     if ui_path.exists():

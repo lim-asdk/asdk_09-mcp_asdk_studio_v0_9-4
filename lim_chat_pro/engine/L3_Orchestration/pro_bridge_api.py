@@ -46,10 +46,10 @@ class ProBridgeAPI:
 
     # --- Personas (Profiles) ---
     def get_personas(self):
-        # We'll import PathManager inside methods to be absolutely safe from recursion
         from L1_Infrastructure.path_manager import PathManager
         try:
-            profile_dir = PathManager.get_profile_dir()
+            pm = PathManager()
+            profile_dir = pm.get_profiles_dir()
             personas = []
             
             for f in profile_dir.glob("*.json"):
