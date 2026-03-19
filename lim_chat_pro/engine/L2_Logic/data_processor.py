@@ -32,14 +32,16 @@ class LimChatDataProcessor:
         
         settings_path = PathManager.get_settings_file()
         
-        # Strict Mode: No pack = No operation
+        # [V5-D-12] Graceful Fallback: If no pack is active, use default keys instead of crashing.
+        default_keys = [
+            'symbol', 'ticker', 'price', 'name', 'Description', 'description', 
+            'longBusinessSummary', 'content', 'full_text', 'summary', 'text',
+            'market_cap', 'volume', 'date', 'time', 'raw_data'
+        ]
+        
         if not settings_path or not settings_path.exists():
-            raise RuntimeError(
-                f"[DataProcessor] No settings.json found in active IQ-Pack.\n"
-                f"Active pack: {PathManager.active_pack or 'None (Legacy Mode)'}\n"
-                f"Expected path: {settings_path}\n"
-                f"Please ensure the pack has a valid settings.json file with 'priority_keys' array."
-            )
+            logger.info(f"[DataProcessor] No settings.json found or active_pack is None. Using {len(default_keys)} default fallback keys.")
+            return default_keys
         
         try:
             import json
