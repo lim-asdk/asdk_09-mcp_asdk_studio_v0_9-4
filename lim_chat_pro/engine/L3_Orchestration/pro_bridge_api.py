@@ -171,22 +171,5 @@ class ProBridgeAPI(LimChatBridgeAPI):
         actual_key = self._config_manager.get_api_key(profile_id)
         return {"key": actual_key if actual_key else ""}
 
-    def test_profile(self, api_key, model, base_url, profile_id=None):
-        """Test if API Key/Model work (Real Backend Test)"""
-        logger.info(f"[ProBridge] Testing Profile: {model} / {base_url} (ID: {profile_id})")
-        
-        # [Fix] If input key is masked (******), get the actual key from ConfigManager
-        target_key = api_key
-        if api_key == "******" and profile_id and profile_id != "new":
-            # Search both in config.json and separate key files
-            actual_key = self._config_manager.get_api_key(profile_id)
-            if actual_key:
-                target_key = actual_key
-                logger.debug("[ProBridge] Using actual key from storage for test (masked input detected)")
-
-        # Call the real check logic in ai_engine
-        is_ok, msg = self._ai_engine.check_api_connectivity(target_key, model, base_url)
-        return {"ok": is_ok, "message": msg}
-
-    # NOTE: chat(), get_profiles(), save_profile(), get_tools() are handled by LimChatBridgeAPI (Parent)
+    # NOTE: chat(), get_profiles(), save_profile(), get_tools(), test_profile() are handled by LimChatBridgeAPI (Parent)
     # This ensures "Real" AI logic and secure key management are active.
