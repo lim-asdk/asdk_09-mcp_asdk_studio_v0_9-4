@@ -112,17 +112,17 @@ def start_hub():
             
     # 3. Mode Choice & Auto-Launch
     print("[RUNNING DIAGNOSTICS... DONE]")
-    print(f"\n> Auto-launching Browser Mode in 3s... (Default)")
+    print(f"\n> Auto-launching Browser Mode in 1.5s... (Default)")
     print("> (Press '1' for Desktop Mode instead)")
     
     import msvcrt
     cmd = None
     start_time = time.time()
-    while time.time() - start_time < 3.0:
+    while time.time() - start_time < 1.5:
         if msvcrt.kbhit():
             cmd = msvcrt.getch().decode('utf-8')
             break
-        time.sleep(0.1)
+        time.sleep(0.05)
 
     if cmd == '1':
         logger.info("Executing Desktop Experience...")
@@ -137,7 +137,7 @@ def start_hub():
     )
     server_thread.start()
     
-    time.sleep(1)
+    time.sleep(0.5)
     url = f"http://localhost:{PORT}/lim_chat_pro/engine/L5_Presentation/index_pro.html"
     webbrowser.open(url)
     logger.info(f"[SUCCESS] Hub ready at {url}")
