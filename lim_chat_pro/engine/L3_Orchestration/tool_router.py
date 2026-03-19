@@ -59,15 +59,10 @@ class ToolRouter:
         # Load dynamic intent map from active pack
         intent_map = self._load_intent_map()
         
-        # Strict Mode: No intent_map = No operation
+        # [V5-D-14] Graceful Fallback: If no pack is active, use general_chat instead of crashing.
         if not intent_map:
-            from L1_Infrastructure.path_manager import PathManager
-            raise RuntimeError(
-                f"[ToolRouter] No intent_map.json found in active IQ-Pack.\n"
-                f"Active pack: {PathManager.active_pack or 'None (Legacy Mode)'}\n"
-                f"Cannot detect user intent without pack configuration.\n"
-                f"Please ensure the pack has a valid intent_map.json file."
-            )
+            logger.info("[ToolRouter] No intent_map.json found or active_pack is None. Using 'general_chat' as fallback.")
+            return "general_chat"
         
         # Dynamic Detection Logic
         for intent_id, intent_info in intent_map.get("intents", {}).items():
