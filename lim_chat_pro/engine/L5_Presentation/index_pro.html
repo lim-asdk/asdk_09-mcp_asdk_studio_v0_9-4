@@ -1505,10 +1505,29 @@
             }
         }
 
-        function toggleKeyVisibility() {
+        async function toggleKeyVisibility() {
             const keyInput = document.getElementById('p-key');
-            const isVisible = document.getElementById('show-key-check').checked;
+            const showCheck = document.getElementById('show-key-check');
+            const isVisible = showCheck.checked;
+            const profileId = document.getElementById('profile-select').value;
+            
             keyInput.type = isVisible ? 'text' : 'password';
+            
+            if (isVisible && profileId !== 'new' && keyInput.value === '******') {
+                try {
+                    // Fetch real key from background
+                    const res = await api.get_profile_key(profileId);
+                    if (res && res.key) {
+                        keyInput.value = res.key;
+                    }
+                } catch (e) {
+                    console.error("Failed to fetch key:", e);
+                }
+            } else if (!isVisible && profileId !== 'new' && keyInput.value !== '******') {
+                // Optional: restore masking when hidden to prevent accidental exposure
+                // But usually, keeping the real value in a password field is fine.
+                // keyInput.value = '******'; 
+            }
         }
 
         async function loadProfileForm(id) {

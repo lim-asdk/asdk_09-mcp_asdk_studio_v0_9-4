@@ -163,6 +163,14 @@ class ProBridgeAPI(LimChatBridgeAPI):
         # Match the System tab expectations
         return super().get_settings_template() if hasattr(super(), 'get_settings_template') else ""
 
+    def get_profile_key(self, profile_id):
+        """[UI] 보안 마스킹 해제를 위해 실제 API Key를 반환합니다."""
+        if not profile_id or profile_id == "new":
+            return {"key": ""}
+        
+        actual_key = self._config_manager.get_api_key(profile_id)
+        return {"key": actual_key if actual_key else ""}
+
     def test_profile(self, api_key, model, base_url, profile_id=None):
         """Test if API Key/Model work (Real Backend Test)"""
         logger.info(f"[ProBridge] Testing Profile: {model} / {base_url} (ID: {profile_id})")
