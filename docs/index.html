@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MCP ASDK Studio v1 | Desktop-First AI Workspace</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0f172a;
+            --accent: #3b82f6;
+            --accent-glow: #8b5cf6;
+            --text: #f8fafc;
+        }
+        body {
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            text-align: center;
+            overflow-x: hidden;
+        }
+        .container {
+            max-width: 900px;
+            padding: 40px;
+            z-index: 10;
+        }
+        .badge {
+            background: rgba(59, 130, 246, 0.1);
+            color: var(--accent);
+            padding: 6px 12px;
+            border-radius: 999px;
+            font-size: 14px;
+            font-weight: 600;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            margin-bottom: 24px;
+            display: inline-block;
+        }
+        h1 {
+            font-size: 64px;
+            font-weight: 800;
+            margin: 0 0 20px 0;
+            background: linear-gradient(135deg, #fff 0%, #94a3b8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        p {
+            font-size: 20px;
+            color: #94a3b8;
+            line-height: 1.6;
+            margin-bottom: 40px;
+        }
+        .cta-group {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+        }
+        .btn {
+            padding: 14px 28px;
+            border-radius: 8px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        .btn-primary {
+            background: var(--accent);
+            color: white;
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.4);
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 30px rgba(59, 130, 246, 0.6);
+        }
+        .btn-outline {
+            border: 1px solid #334155;
+            color: #f1f5f9;
+        }
+        .btn-outline:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+        .footer {
+            margin-top: 80px;
+            font-size: 14px;
+            color: #475569;
+        }
+        .glow {
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.15) 0%, transparent 70%);
+            top: -200px;
+            right: -200px;
+            z-index: 1;
+        }
+    </style>
+</head>
+<body>
+    <div class="glow"></div>
+    <div class="container">
+        <div class="badge">v1.0 Public Beta</div>
+        <h1>MCP ASDK Studio</h1>
+        <p>
+            Experience the next generation of <strong>Desktop-First AI Workspaces</strong>.<br>
+            Configure AI providers, connect MCP servers, and build vertical agents with clinical precision.
+        </p>
+        <div class="cta-group">
+            <a href="https://github.com/lim-asdk/asdk_09-mcp_asdk_studio_v0_9-4" class="btn btn-primary">View on GitHub</a>
+            <a href="ko/PRODUCT_OVERVIEW.md" class="btn btn-outline">Documentation</a>
+        </div>
+        <div class="footer">
+            &copy; 2026 lim_hwa_chan. All rights reserved.
+        </div>
+    </div>
+</body>
+</html>
