@@ -51,3 +51,5 @@ lim_pack_public_test/
 docs/internal/
 keys/
 .env
+mcp_config.json
+*.log

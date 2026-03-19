@@ -32,12 +32,16 @@ logging.basicConfig(
 )
 logger = logging.getLogger("ASDK.GlobalHub")
 
-# Setup project path for module discovery
-sys.path.append(os.getcwd())
+# --- DYNAMIC IMPORTS FOR L3 ORCHESTRATION ---
+# Ensure we can find the project modules and engine layers
+root_path = os.getcwd()
+sys.path.append(root_path)
+sys.path.append(os.path.join(root_path, "lim_chat_pro", "engine"))
+
 try:
     from lim_chat_pro.engine.L3_Orchestration.pro_bridge_api import ProBridgeAPI
 except ImportError as e:
-    logger.error(f"[FATAL] ProBridgeAPI import failed: {e}")
+    logger.error(f"[FATAL] Cannot import ProBridgeAPI: {e}")
     sys.exit(1)
 
 # Initialize the bridge
