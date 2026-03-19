@@ -1,0 +1,6 @@
+2026-03-19 23:20:45,876 [INFO] --- Phase 1: Environment Integrity Check ---
+2026-03-19 23:20:45,877 [INFO] [PASS] Directory found: user_data
+2026-03-19 23:20:45,878 [INFO] [PASS] Directory found: lim_chat_pro
+2026-03-19 23:20:45,878 [INFO] [PASS] Directory found: docs
+2026-03-19 23:20:45,878 [INFO] [PASS] Directory found: keys
+2026-03-19 23:20:45,879 [INFO] [PASS] Settings Loaded: grok-beta
