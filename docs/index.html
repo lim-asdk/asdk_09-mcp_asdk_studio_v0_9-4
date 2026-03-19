@@ -3,17 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MCP ASDK Studio v0.9-4 | Professional AI Workspace</title>
+    <title>MCP ASDK Studio v0.9-4 | Desktop-First AI Workspace for Builders</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg: #0b0f1a;
-            --card-bg: #161b2a;
+            --bg: #090c15;
+            --card-bg: #111827;
             --accent: #3b82f6;
-            --accent-glow: rgba(59, 130, 246, 0.5);
-            --text-main: #f8fafc;
-            --text-dim: #94a3b8;
-            --border: rgba(255, 255, 255, 0.1);
+            --accent-glow: rgba(59, 130, 246, 0.4);
+            --text-main: #f3f4f6;
+            --text-dim: #9ca3af;
+            --border: rgba(255, 255, 255, 0.08);
+            --success: #10b981;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -25,279 +26,396 @@
             overflow-x: hidden;
         }
 
-        /* Hero Section */
+        /* Hero */
         .hero {
-            padding: 120px 20px 60px;
+            padding: 140px 20px 80px;
             text-align: center;
-            position: relative;
+            max-width: 1000px;
+            margin: 0 auto;
         }
-        .hero::before {
-            content: '';
-            position: absolute;
-            top: -100px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 600px;
-            height: 600px;
-            background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
-            z-index: -1;
-            opacity: 0.3;
-        }
-
         .version-tag {
             display: inline-block;
-            padding: 4px 12px;
-            background: rgba(59, 130, 246, 0.15);
+            padding: 4px 14px;
+            background: rgba(59, 130, 246, 0.1);
             color: var(--accent);
             border-radius: 99rem;
             font-size: 0.85rem;
-            font-weight: 600;
-            margin-bottom: 1.5rem;
+            font-weight: 700;
             border: 1px solid var(--accent);
+            margin-bottom: 2rem;
+            letter-spacing: 0.05em;
         }
-
         h1 {
-            font-size: 4rem;
+            font-size: 4.5rem;
             font-weight: 800;
-            letter-spacing: -0.02em;
+            line-height: 1.1;
             margin-bottom: 1.5rem;
-            background: linear-gradient(to bottom, #fff, #94a3b8);
+            background: linear-gradient(to bottom, #fff 40%, #9ca3af);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            letter-spacing: -0.03em;
         }
-
         .hero p {
-            font-size: 1.25rem;
+            font-size: 1.35rem;
             color: var(--text-dim);
-            max-width: 700px;
-            margin: 0 auto 2.5rem;
+            margin-bottom: 3rem;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
         }
-
-        .cta-group {
+        .cta-container {
             display: flex;
-            gap: 1rem;
+            gap: 1.25rem;
             justify-content: center;
             flex-wrap: wrap;
         }
-
         .btn {
-            padding: 12px 32px;
-            border-radius: 8px;
+            padding: 14px 36px;
+            border-radius: 10px;
             font-weight: 600;
             text-decoration: none;
-            transition: all 0.2s;
-            font-size: 1rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-size: 1.05rem;
         }
         .btn-primary {
-            background-color: var(--accent);
-            color: white;
-            box-shadow: 0 4px 14px 0 rgba(0, 118, 255, 0.39);
+            background: var(--accent);
+            color: #fff;
+            box-shadow: 0 0 25px var(--accent-glow);
         }
         .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0, 118, 255, 0.45);
+            transform: translateY(-3px);
+            filter: brightness(1.1);
+            box-shadow: 0 0 35px var(--accent-glow);
         }
         .btn-secondary {
-            background-color: transparent;
             border: 1px solid var(--border);
             color: var(--text-main);
+            background: rgba(255, 255, 255, 0.03);
         }
         .btn-secondary:hover {
-            background-color: rgba(255, 255, 255, 0.05);
+            background: rgba(255, 255, 255, 0.08);
+            border-color: var(--text-dim);
         }
 
-        /* Features Section */
-        .features {
-            padding: 80px 20px;
-            max-width: 1100px;
-            margin: 0 auto;
+        /* Sections */
+        section { padding: 100px 20px; max-width: 1200px; margin: 0 auto; }
+        .section-header { text-align: center; margin-bottom: 4rem; }
+        .section-header h2 { font-size: 2.5rem; margin-bottom: 1rem; letter-spacing: -0.02em; }
+        .section-header p { color: var(--text-dim); font-size: 1.15rem; }
+
+        /* Problem Section */
+        .why-this {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            background: rgba(59, 130, 246, 0.03);
+            border-radius: 24px;
+            padding: 60px 40px;
+            border: 1px solid var(--border);
         }
-        .section-title {
-            text-align: center;
-            font-size: 2.25rem;
-            margin-bottom: 3.5rem;
-        }
+        .problem-card h4 { color: var(--accent); margin-bottom: 0.75rem; font-size: 1.1rem; }
+        .problem-card p { font-size: 0.95rem; color: var(--text-dim); }
+
+        /* Scenarios (Enhanced Cards) */
         .grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
             gap: 1.5rem;
         }
         .card {
             background: var(--card-bg);
-            padding: 2rem;
-            border-radius: 12px;
+            padding: 2.5rem;
+            border-radius: 20px;
             border: 1px solid var(--border);
-            transition: border-color 0.2s;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
         }
         .card:hover {
             border-color: var(--accent);
+            transform: translateY(-5px);
+            background: rgba(59, 130, 246, 0.02);
         }
-        .card h3 {
-            margin-bottom: 0.75rem;
-            font-size: 1.25rem;
-        }
-        .card p {
-            color: var(--text-dim);
-            font-size: 0.95rem;
-        }
+        .card h3 { margin-bottom: 1rem; font-size: 1.35rem; }
+        .card p { color: var(--text-dim); font-size: 0.95rem; }
 
-        /* Screenshots */
-        .showcase {
-            padding: 80px 20px;
-            background: rgba(255, 255, 255, 0.02);
-            text-align: center;
+        /* Comparison Table */
+        .comparison-container {
+            overflow-x: auto;
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            background: var(--card-bg);
         }
-        .screenshot-container {
-            max-width: 1000px;
-            margin: 0 auto;
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            min-width: 600px;
+        }
+        th, td { padding: 1.25rem 2rem; border-bottom: 1px solid var(--border); }
+        th { font-weight: 700; color: #fff; background: rgba(255,255,255,0.02); }
+        .highlight { color: var(--accent); font-weight: 700; }
+        .check { color: var(--success); font-weight: 800; }
+
+        /* Showcase */
+        .showcase-item { margin-bottom: 60px; text-align: center; }
+        .img-wrap {
             border-radius: 16px;
             overflow: hidden;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
             border: 1px solid var(--border);
+            box-shadow: 0 30px 60px -12px rgba(0,0,0,0.6);
+            margin-bottom: 1.5rem;
         }
-        .screenshot-container img {
-            width: 100%;
-            display: block;
-        }
-        .caption {
-            padding: 1rem;
-            background: #1e293b;
-            font-size: 0.85rem;
-            color: var(--text-dim);
-            text-align: left;
-        }
+        .img-wrap img { width: 100%; display: block; }
+        .caption { color: var(--text-dim); font-size: 0.95rem; line-height: 1.6; max-width: 800px; margin: 0 auto; }
 
-        /* Getting Started */
-        .get-started {
-            padding: 80px 20px;
-            max-width: 800px;
-            margin: 0 auto;
-        }
-        .step {
-            display: flex;
-            gap: 1.5rem;
-            margin-bottom: 2rem;
-            align-items: flex-start;
-        }
-        .step-num {
-            background: var(--accent);
-            width: 32px;
-            height: 32px;
-            flex-shrink: 0;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 800;
-        }
-        code {
+        /* Quick Start (Inline) */
+        .quick-box {
             background: #000;
-            padding: 2px 6px;
-            border-radius: 4px;
-            font-family: monospace;
-            color: #fbbf24;
+            padding: 40px;
+            border-radius: 20px;
+            border: 1px solid var(--accent);
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
         }
+        .step-small { font-size: 0.9rem; }
+        .step-small strong { display: block; color: var(--accent); margin-bottom: 10px; font-size: 0.8rem; text-transform: uppercase; }
+        code { background: #1a1a1a; padding: 4px 8px; border-radius: 4px; display: block; margin-top: 5px; color: #fbbf24; font-size: 0.85rem; }
+
+        /* Trust Block */
+        .trust-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1rem;
+            margin-top: 4rem;
+        }
+        .trust-item {
+            padding: 20px;
+            border-left: 3px solid var(--accent);
+            background: rgba(255,255,255,0.02);
+        }
+        .trust-item strong { display: block; margin-bottom: 5px; font-size: 0.85rem; color: var(--text-dim); }
 
         /* Footer */
         footer {
-            padding: 60px 20px;
-            border-top: 1px solid var(--border);
+            padding: 80px 20px;
             text-align: center;
+            border-top: 1px solid var(--border);
             font-size: 0.9rem;
             color: var(--text-dim);
         }
 
         @media (max-width: 768px) {
-            h1 { font-size: 2.5rem; }
-            .hero { padding-top: 80px; }
+            h1 { font-size: 2.75rem; }
+            section { padding: 60px 20px; }
+            .why-this { padding: 40px 20px; }
         }
     </style>
 </head>
 <body>
 
-    <section class="hero">
-        <div class="version-tag">v0.9-4 Public Beta</div>
-        <h1>MCP ASDK Studio</h1>
+    <header class="hero">
+        <div class="version-tag">Public Beta v0.9-4</div>
+        <h1>Desktop-First AI Workspace for MCP Builders</h1>
         <p>
-            The Ultimate 100% Free AI Development Workspace.<br>
-            A Professional-Grade Alternative to Commercial AI Desktop Apps.
+            Stop fighting with scattered tools. Inspect, test, and orbit your AI workflows 
+            within a professional-grade local workspace designed for builders.
         </p>
-        <div class="cta-group">
+        <div class="cta-container">
             <a href="https://github.com/lim-asdk/asdk_09-mcp_asdk_studio_v0_9-4" class="btn btn-primary">View on GitHub</a>
-            <a href="RELEASE_GUIDE_V5.md" class="btn btn-secondary">Release Guide</a>
-            <a href="ko/PRODUCT_OVERVIEW.md" class="btn btn-secondary">Korean Doc</a>
+            <a href="#quick-start" class="btn btn-secondary">Quick Start</a>
+            <a href="ko/PRODUCT_OVERVIEW.md" class="btn btn-secondary">Documentation</a>
+        </div>
+    </header>
+
+    <section>
+        <div class="section-header">
+            <h2>The Builder's Dilemma</h2>
+            <p>Why we built ASDK Studio</p>
+        </div>
+        <div class="why-this">
+            <div class="problem-card">
+                <h4>Opaque AI Apps</h4>
+                <p>Most AI desktop tools hide the "how". ASDK Studio makes tool execution and MCP data flows fully visible.</p>
+            </div>
+            <div class="problem-card">
+                <h4>Scattered Fragments</h4>
+                <p>MCP testing and persona configuration are often CLI-only. We provide a unified control surface.</p>
+            </div>
+            <div class="problem-card">
+                <h4>Fragile Environments</h4>
+                <p>Moving from local experiments to product-grade setups is hard. Our V5 architecture standardizes the path.</p>
+            </div>
         </div>
     </section>
 
-    <section class="features">
-        <h2 class="section-title">Core Capabilities</h2>
+    <section>
+        <div class="section-header">
+            <h2>Built for Your Workflow</h2>
+            <p>From tool inspection to vertical agent practice</p>
+        </div>
         <div class="grid">
             <div class="card">
-                <h3>Multi-AI Configuration</h3>
-                <p>Easily swap between Claude, GPT, and custom providers via standardized profiles.</p>
+                <h3>Inspect MCP Flows</h3>
+                <p>Verify exactly what tools your AI sees and how it executes them. No black boxes, just live inspection.</p>
             </div>
             <div class="card">
-                <h3>Native MCP Support</h3>
-                <p>Connect and inspect MCP servers (local scripts or SSE) with a clinical setup interface.</p>
+                <h3>Rapid Persona Testing</h3>
+                <p>Switch between system specialized profiles and personas in seconds to test response consistency.</p>
             </div>
             <div class="card">
-                <h3>V5 Architecture</h3>
-                <p>Robust L1-L4 vertical alignment ensuring stability and easy environment migration.</p>
+                <h3>Local-First Practice</h3>
+                <p>Build and run vertical agent workflows without the overhead of heavy cloud services. 100% private.</p>
             </div>
             <div class="card">
-                <h3>Vertical Agents</h3>
-                <p>Design and practice specialized agent workflows with persona-based logic.</p>
-            </div>
-            <div class="card">
-                <h3>Safety First</h3>
-                <p>100% Local data handling. Your API keys and history never leave your machine.</p>
-            </div>
-            <div class="card">
-                <h3>Open & Extensible</h3>
-                <p>Modify and expand the studio using AI. Built for the community by developers.</p>
+                <h3>Unified Control Surface</h3>
+                <p>A dedicated desktop UI that bridges the gap between raw Python scripts and commercial-grade AI apps.</p>
             </div>
         </div>
     </section>
 
-    <section class="showcase">
-        <div class="screenshot-container">
-            <div class="caption">Main Chat Interface & Vertical Persona Selection</div>
-            <img src="assets/screenshot.png" alt="ASDK Studio UI">
-            <div class="caption" style="border-top: 1px solid var(--border)">MCP Server Setup & Tool Inspection</div>
-            <img src="assets/mcp_setup.png" alt="ASDK Studio Setup">
+    <section>
+        <div class="section-header">
+            <h2>Product Walkthrough</h2>
+            <p>Visualizing the ASDK Experience</p>
+        </div>
+        <div class="showcase-item">
+            <div class="img-wrap">
+                <img src="assets/screenshot.png" alt="Main Interface">
+            </div>
+            <p class="caption">
+                <strong>Main Intelligence Hub:</strong> High-performance chat interface with real-time persona and profile selection. 
+                Perfect for observing how different configurations impact AI reasoning.
+            </p>
+        </div>
+        <div class="showcase-item">
+            <div class="img-wrap">
+                <img src="assets/mcp_setup.png" alt="MCP Setup">
+            </div>
+            <p class="caption">
+                <strong>MCP Clinical Setup:</strong> Standardized diagnostic view for MCP servers. 
+                Instantly identify connection health and available toolsets in your local environment.
+            </p>
         </div>
     </section>
 
-    <section class="get-started">
-        <h2 class="section-title">Quick Start</h2>
-        <div class="step">
-            <div class="step-num">1</div>
-            <div>
-                <strong>Clone Repository</strong><br>
-                <code>git clone https://github.com/lim-asdk/asdk_09-mcp_asdk_studio_v0_9-4.git</code>
-            </div>
+    <section>
+        <div class="section-header">
+            <h2>Why ASDK Studio?</h2>
+            <p>A clear comparison for builders</p>
         </div>
-        <div class="step">
-            <div class="step-num">2</div>
-            <div>
-                <strong>Install Dependencies</strong><br>
+        <div class="comparison-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Capability</th>
+                        <th>Generic Chat Apps</th>
+                        <th>Dev CLI Tools</th>
+                        <th class="highlight">ASDK Studio</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Visible Tool Inspection</td>
+                        <td>❌ Hidden</td>
+                        <td>🟡 Raw Logs</td>
+                        <td class="check">✅ Dedicated UI</td>
+                    </tr>
+                    <tr>
+                        <td>Persona/Profile Switching</td>
+                        <td>🟡 Basic</td>
+                        <td>❌ Manual</td>
+                        <td class="check">✅ Instant Hot-swap</td>
+                    </tr>
+                    <tr>
+                        <td>Local Data Isolation</td>
+                        <td>❌ Cloud-only</td>
+                        <td>✅ Yes</td>
+                        <td class="check">✅ Yes (100% Private)</td>
+                    </tr>
+                    <tr>
+                        <td>Architectural Standards</td>
+                        <td>Proprietary</td>
+                        <td>Ad-hoc</td>
+                        <td class="check">V5 Intelligence Matrix</td>
+                    </tr>
+                    <tr>
+                        <td>Open Source Base</td>
+                        <td>❌ Closed</td>
+                        <td>✅ Yes</td>
+                        <td class="check">✅ MIT Licensed</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <section id="quick-start">
+        <div class="section-header">
+            <h2>Ready to Build?</h2>
+            <p>Launch your studio in under 60 seconds</p>
+        </div>
+        <div class="quick-box">
+            <div class="step-small">
+                <strong>Step 1. Clone</strong>
+                <code>git clone [repo_url]</code>
+            </div>
+            <div class="step-small">
+                <strong>Step 2. Install</strong>
                 <code>pip install -r requirements.txt</code>
             </div>
-        </div>
-        <div class="step">
-            <div class="step-num">3</div>
-            <div>
-                <strong>Configure & Launch</strong><br>
-                Set up <code>default.json</code> and run <code>python main.py</code>.<br>
-                <em>*This project is a desktop-first application, not a web app.</em>
+            <div class="step-small">
+                <strong>Step 3. Run</strong>
+                <code>python main.py</code>
             </div>
+            <div class="step-small">
+                <strong>Step 4. Build</strong>
+                Load your MCP & Test.
+            </div>
+        </div>
+        
+        <div class="trust-grid">
+            <div class="trust-item">
+                <strong>Status</strong>
+                Public Beta v0.9-4
+            </div>
+            <div class="trust-item">
+                <strong>Best For</strong>
+                Builders & Researchers
+            </div>
+            <div class="trust-item">
+                <strong>Next Focus</strong>
+                Multi-server Integration
+            </div>
+        </div>
+    </section>
+
+    <section style="text-align: center; background: rgba(59, 130, 246, 0.05); border-radius: 32px; padding: 80px 40px;">
+        <h2 style="font-size: 3rem; margin-bottom: 25px;">Finalize Your AI Workspace</h2>
+        <p style="color: var(--text-dim); margin-bottom: 40px; font-size: 1.25rem;">
+            Join the open-source movement for a transparent AI future.
+        </p>
+        <div class="cta-container">
+            <a href="https://github.com/lim-asdk/asdk_09-mcp_asdk_studio_v0_9-4" class="btn btn-primary">Try Public Beta Now</a>
+            <a href="ko/PRODUCT_OVERVIEW.md" class="btn btn-secondary">Read Documentation</a>
         </div>
     </section>
 
     <footer>
-        <p>&copy; 2026 lim_hwa_chan. Project under MIT License.</p>
-        <p style="margin-top: 10px;">Built for the Global AI Community.</p>
+        <p>&copy; 2026 lim_hwa_chan. All rights reserved.</p>
+        <p style="margin-top: 10px;">ASDK Studio: The Standard for Professional AI Research.</p>
     </footer>
+
+    <script>
+        // Update clone URL dynamically for copy-paste safely
+        const repoUrl = "https://github.com/lim-asdk/asdk_09-mcp_asdk_studio_v0_9-4.git";
+        document.querySelectorAll('code').forEach(el => {
+            if(el.textContent.includes('[repo_url]')) {
+                el.innerText = el.innerText.replace('[repo_url]', repoUrl);
+            }
+        });
+    </script>
 
 </body>
 </html>
