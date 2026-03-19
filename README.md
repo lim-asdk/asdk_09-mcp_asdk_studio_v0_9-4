@@ -2,11 +2,9 @@
 
 > **"Your High-Performance, Free Alternative to Commercial AI Desktops"**
 
-**MCP ASDK Studio is a 100% Free, Open-Source AI development workspace.** It is designed as a powerful alternative to commercial solutions (like Claude Desktop), giving you the freedom to own your engine, customize your tools with AI, and run professional-grade workflows without platform lock-in.
-
----
-
 ![MCP ASDK Studio Screenshot](docs/assets/screenshot.png)
+
+**MCP ASDK Studio is a 100% Free, Open-Source AI development workspace.**
 *Actual Product UI - Experience the premium 'Lim Chat PRO' engine for free.*
 
 ---
