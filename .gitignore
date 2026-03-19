@@ -53,3 +53,4 @@ keys/
 .env
 mcp_config.json
 *.log
+beta_server.log

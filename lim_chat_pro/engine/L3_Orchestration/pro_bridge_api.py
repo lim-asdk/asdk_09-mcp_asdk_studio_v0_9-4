@@ -1,6 +1,7 @@
 import logging
 import os
 import json
+import threading
 from pathlib import Path
 
 # Use the base class for "Real" functionality
@@ -31,8 +32,8 @@ class ProBridgeAPI(LimChatBridgeAPI):
         # Update loaders
         self._profile_loader.profile_dir = self._pro_profile_dir
         
-        # Start servers once
-        self._init_servers()
+        # Start servers in background to prevent blocking boot sequence
+        threading.Thread(target=self._init_servers, daemon=True).start()
         
         # [V5 Sync] Pull key from .env to match screenshot's 'grok-4-1' profile
         self._sync_production_config()

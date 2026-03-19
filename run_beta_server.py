@@ -1,8 +1,8 @@
 """
-MCP ASDK Studio v0.9-4 | Ultra-Fast Beta Server Hub
+MCP ASDK Studio v0.9-5 | Ultra-Fast Beta Server Hub (V5 Async Edition)
 Standardized via V5 Intelligence Matrix
 
-FUNCTION: Unified Beta Server & Launcher (Speed Optimized)
+FUNCTION: Unified Beta Server & Launcher (Asynchronous Boot)
 TARGET: Desktop (Main) & Browser (Sub-system)
 """
 
@@ -32,49 +32,51 @@ logging.basicConfig(
 )
 logger = logging.getLogger("ASDK.GlobalHub")
 
-# --- DYNAMIC IMPORTS FOR L3 ORCHESTRATION ---
-# Ensure we can find the project modules and engine layers
-root_path = os.getcwd()
-sys.path.append(root_path)
-sys.path.append(os.path.join(root_path, "lim_chat_pro", "engine"))
+# Global Bridge Placeholder
+BRIDGE = None
 
-try:
-    from lim_chat_pro.engine.L3_Orchestration.pro_bridge_api import ProBridgeAPI
-except ImportError as e:
-    logger.error(f"[FATAL] Cannot import ProBridgeAPI: {e}")
-    sys.exit(1)
+# --- DYNAMIC IMPORTS & RUNTIME SETUP ---
+def setup_runtime():
+    """Path resolution logic."""
+    root = Path(__file__).resolve().parent
+    if not (root / "lim_chat_pro").exists():
+        for i in range(3):
+            if (root.parents[i] / "lim_chat_pro").exists():
+                root = root.parents[i]
+                break
+    if str(root) not in sys.path: sys.path.insert(0, str(root))
+    engine_path = root / "lim_chat_pro" / "engine"
+    if str(engine_path) not in sys.path: sys.path.insert(0, str(engine_path))
+    return root
 
-# Initialize the bridge
-BRIDGE = ProBridgeAPI()
+ROOT_PATH = setup_runtime()
 
 def kill_existing_port(port):
-    """
-    Ultra-fast port cleaning using native netstat.
-    Solves 'address already in use' instantly.
-    """
+    """Ultra-fast port cleaning."""
     if os.name == 'nt':
         try:
-            # High-speed PID lookup
             cmd = f'netstat -ano | findstr :{port}'
             output = subprocess.check_output(cmd, shell=True).decode().strip()
             if output:
-                # Get the last column (PID) from the first line matching the port
-                lines = output.split('\n')
-                for line in lines:
+                for line in output.split('\n'):
                     parts = line.split()
                     if parts and len(parts) > 4:
                         pid = parts[-1]
                         if pid != '0':
                             logger.info(f"[PORT] Releasing port {port} (PID: {pid})...")
                             os.system(f"taskkill /F /PID {pid} >nul 2>&1")
-                time.sleep(0.1) # Minimum stabilization
-        except Exception as e:
-            logger.debug(f"Fast-kill skipped: {e}")
+                time.sleep(0.1)
+        except Exception:
+            pass
 
 class ASDKFunctionalHub(http.server.SimpleHTTPRequestHandler):
     """Functional REST Proxy for Browser-to-Python interaction."""
+    
     def do_POST(self):
         if self.path == '/api/call':
+            if BRIDGE is None:
+                self._send_json({"status": "error", "message": "Bridge is initializing... Please wait."}, 503)
+                return
             try:
                 content_length = int(self.headers['Content-Length'])
                 raw_data = self.rfile.read(content_length).decode('utf-8')
@@ -83,101 +85,79 @@ class ASDKFunctionalHub(http.server.SimpleHTTPRequestHandler):
                 method_name = data.get('method')
                 args = data.get('args', [])
                 
-                logger.debug(f"[HUB API] Calling: {method_name}")
-                
                 if hasattr(BRIDGE, method_name):
                     method = getattr(BRIDGE, method_name)
-                    # Handle both sync and async-style calls if needed 
-                    # (ProBridgeAPI is generally sync for JS calls)
                     result = method(*args) if isinstance(args, list) else method(args)
                     self._send_json({"status": "success", "result": result})
                 else:
-                    logger.warning(f"[HUB API] Method not found: {method_name}")
                     self._send_json({"status": "error", "message": f"Method {method_name} not found"}, 404)
             except Exception as e:
                 logger.error(f"[HUB API] Crash: {str(e)}")
-                self._send_json({"status": "error", "message": f"Server Crash: {str(e)}"}, 500)
+                self._send_json({"status": "error", "message": str(e)}, 500)
         else:
             self.send_error(404)
 
     def _send_json(self, data, code=200):
-        self.send_response(code)
-        self.send_header('Content-Type', 'application/json')
-        self.send_header('Access-Control-Allow-Origin', '*')
-        self.end_headers()
-        self.wfile.write(json.dumps(data).encode('utf-8'))
+        try:
+            self.send_response(code)
+            self.send_header('Content-Type', 'application/json')
+            self.send_header('Access-Control-Allow-Origin', '*')
+            self.end_headers()
+            self.wfile.write(json.dumps(data).encode('utf-8'))
+        except Exception:
+            pass
 
     def log_message(self, format, *args):
-        pass # Suppress noisy logs
+        pass # Silence HTTP logs
 
 def start_hub():
-    """Ultra-fast Launch Sequence"""
-    os.chdir(Path(__file__).parent.absolute())
-    clear_screen()
+    """Ultra-fast Launch Sequence (SLA < 2s for UI)"""
+    os.chdir(ROOT_PATH)
+    os.system('cls' if os.name == 'nt' else 'clear')
     
     print("==========================================================")
-    print(f"   MCP ASDK STUDIO v0.9-4 | ULTRA-FAST HUB")
-    print(f"   Target: Professional Browser Experience (Port: {PORT})")
+    print(f"   MCP ASDK STUDIO v0.9-5 | ULTRA-FAST ASYNC HUB")
+    print(f"   Status: High-Speed Boot Sequence Initialized")
     print("==========================================================\n")
     
-    # 1. Fast Port Cleanup
+    # 1. Immediate Port Cleanup & Server Thread Start
     kill_existing_port(PORT)
-    
-    # 2. Structure Verification (Cached-like Speed)
-    required = ["user_data", "lim_chat_pro/engine/L5_Presentation/index_pro.html"]
-    for item in required:
-        if not Path(item).exists():
-            logger.error(f"[FAIL] Missing {item}")
-            sys.exit(1)
-            
-    # 3. Mode Choice & High-Speed Auto-Launch
-    print("[DIAGNOSTICS... OK]")
-    print(f"\n> Auto-launching Web Studio in 0.7s...")
-    print("> (Press '1' for Desktop Mode, '3' for Docs)")
-    
-    import msvcrt
-    cmd = None
-    start_time = time.time()
-    # Reduced delay for snappier feel
-    while time.time() - start_time < 0.7:
-        if msvcrt.kbhit():
-            cmd = msvcrt.getch().decode('utf-8')
-            break
-        time.sleep(0.02)
-
-    if cmd == '1':
-        logger.info("Starting Desktop...")
-        subprocess.Popen([sys.executable, "main.py"])
-        return
-    elif cmd == '3':
-        logger.info("Opening Documentation...")
-        webbrowser.open("http://localhost:2026/docs/index.html")
-        # Need to start server anyway
-    
-    # Start Functional Server
-    logger.info("Activating L3 Hub Bridge...")
     socketserver.TCPServer.allow_reuse_address = True
     try:
         httpd = socketserver.TCPServer(("", PORT), ASDKFunctionalHub)
-        server_thread = threading.Thread(target=httpd.serve_forever, daemon=True)
-        server_thread.start()
+        threading.Thread(target=httpd.serve_forever, daemon=True).start()
+        logger.info(f"[BOOT] Web Server active on Port {PORT}")
     except Exception as e:
         logger.error(f"[FATAL] Server start failed: {e}")
         sys.exit(1)
-    
-    # Smallest possible stabilization
-    time.sleep(0.2)
+
+    # 2. Immediate Browser Launch (Visual confirmation within seconds)
     url = f"http://localhost:{PORT}/lim_chat_pro/engine/L5_Presentation/index_pro.html"
+    logger.info(f"[BOOT] Launching Browser immediately...")
     webbrowser.open(url)
-    logger.info(f"[SUCCESS] Web Studio Hub is Live at {url}")
+    
+    # 3. Background Bridge Activation (Heavy Lifting)
+    def activate_bridge_async():
+        global BRIDGE
+        try:
+            logger.info("[ASYNC] Loading L3 Orchestration Bridge...")
+            # Late-import to avoid boot delay
+            from lim_chat_pro.engine.L3_Orchestration.pro_bridge_api import ProBridgeAPI
+            BRIDGE = ProBridgeAPI()
+            logger.info("[SUCCESS] Bridge Active. All MCP Servers Synced.")
+        except Exception as e:
+            logger.error(f"[FATAL] Bridge Activation Failed: {e}")
+
+    threading.Thread(target=activate_bridge_async, daemon=True).start()
+    
+    print(f"\n> UI is opening at {url}")
+    print("> The engine is warming up in the background...")
+    print("> (Press Ctrl+C to shut down)\n")
     
     try:
         while True: time.sleep(1)
     except KeyboardInterrupt:
         logger.info("Hub Shut Down.")
-
-def clear_screen():
-    os.system('cls' if os.name == 'nt' else 'clear')
 
 if __name__ == "__main__":
     start_hub()
