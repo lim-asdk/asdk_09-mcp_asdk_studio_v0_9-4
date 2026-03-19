@@ -46,10 +46,10 @@ class ProBridgeAPI(LimChatBridgeAPI):
         """[UI] 사용 가능한 AI 모델 목록을 반환합니다."""
         return {
             "models": [
-                {"id": "grok-beta", "name": "Grok Beta (xAI)"},
                 {"id": "grok-2", "name": "Grok 2 (xAI)"},
+                {"id": "grok-beta", "name": "Grok Beta (xAI)"},
                 {"id": "gpt-4o", "name": "GPT-4o (OpenAI)"},
-                {"id": "claude-3-5-sonnet-20240620", "name": "Claude 3.5 Sonnet (Anthropic)"}
+                {"id": "claude-3-5-sonnet-20241022", "name": "Claude 3.5 Sonnet (New)"}
             ]
         }
 
@@ -75,16 +75,16 @@ class ProBridgeAPI(LimChatBridgeAPI):
                 new_profile = {
                     "id": target_profile_id,
                     "name": target_profile_id,
-                    "model": "grok-beta", # Must not be empty
+                    "model": "grok-2", # Updated to grok-2 for stability
                     "base_url": "https://api.x.ai/v1",
                     "system_prompt": "You are a fast, non-reasoning Grok-powered assistant."
                 }
                 profiles.append(new_profile)
                 self._config_manager.config["profiles"] = profiles
             else:
-                # Fix missing model if any to avoid UI 'Fill all fields' error
-                if not existing.get("model"):
-                    existing["model"] = "grok-beta"
+                # Update model if it was grok-beta and failed
+                if not existing.get("model") or existing.get("model") == "grok-beta":
+                    existing["model"] = "grok-2"
             
             self._config_manager.config["active_profile_id"] = target_profile_id
             if grok_key:
