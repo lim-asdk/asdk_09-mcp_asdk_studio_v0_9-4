@@ -46,8 +46,9 @@ class ProBridgeAPI(LimChatBridgeAPI):
         """[UI] 사용 가능한 AI 모델 목록을 반환합니다."""
         return {
             "models": [
-                {"id": "grok-2", "name": "Grok 2 (xAI)"},
-                {"id": "grok-beta", "name": "Grok Beta (xAI)"},
+                {"id": "grok-2-latest", "name": "Grok 2 (Latest)"},
+                {"id": "grok-2-vision-latest", "name": "Grok 2 Vision"},
+                {"id": "grok-beta", "name": "Grok Beta"},
                 {"id": "gpt-4o", "name": "GPT-4o (OpenAI)"},
                 {"id": "claude-3-5-sonnet-20241022", "name": "Claude 3.5 Sonnet (New)"}
             ]
@@ -75,16 +76,16 @@ class ProBridgeAPI(LimChatBridgeAPI):
                 new_profile = {
                     "id": target_profile_id,
                     "name": target_profile_id,
-                    "model": "grok-2", # Updated to grok-2 for stability
+                    "model": "grok-2-latest", # Updated to grok-2-latest for stability
                     "base_url": "https://api.x.ai/v1",
                     "system_prompt": "You are a fast, non-reasoning Grok-powered assistant."
                 }
                 profiles.append(new_profile)
                 self._config_manager.config["profiles"] = profiles
             else:
-                # Update model if it was grok-beta and failed
-                if not existing.get("model") or existing.get("model") == "grok-beta":
-                    existing["model"] = "grok-2"
+                # Update model if it was grok-beta/grok-2 and failed
+                if not existing.get("model") or existing.get("model") in ["grok-beta", "grok-2"]:
+                    existing["model"] = "grok-2-latest"
             
             self._config_manager.config["active_profile_id"] = target_profile_id
             if grok_key:
@@ -161,6 +162,23 @@ class ProBridgeAPI(LimChatBridgeAPI):
     def get_settings_template(self):
         # Match the System tab expectations
         return super().get_settings_template() if hasattr(super(), 'get_settings_template') else ""
+
+    def test_profile(self, api_key, model, base_url, profile_id=None):
+        """Test if API Key/Model work (Real Backend Test)"""
+        logger.info(f"[ProBridge] Testing Profile: {model} / {base_url} (ID: {profile_id})")
+        
+        # [Fix] If input key is masked (******), get the actual key from ConfigManager
+        target_key = api_key
+        if api_key == "******" and profile_id and profile_id != "new":
+            # Search both in config.json and separate key files
+            actual_key = self._config_manager.get_api_key(profile_id)
+            if actual_key:
+                target_key = actual_key
+                logger.debug("[ProBridge] Using actual key from storage for test (masked input detected)")
+
+        # Call the real check logic in ai_engine
+        is_ok, msg = self._ai_engine.check_api_connectivity(target_key, model, base_url)
+        return {"ok": is_ok, "message": msg}
 
     # NOTE: chat(), get_profiles(), save_profile(), get_tools() are handled by LimChatBridgeAPI (Parent)
     # This ensures "Real" AI logic and secure key management are active.
