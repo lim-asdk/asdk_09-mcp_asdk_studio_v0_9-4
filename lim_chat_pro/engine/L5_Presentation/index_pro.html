@@ -1,0 +1,2150 @@
+<!-- 
+    Project: lim_chat_v2_0
+    Developer: LIMHWACHAN
+    Version: 2.0
+-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MCP ASDK Studio v1</title>
+    <!-- Google Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;700&display=swap"
+        rel="stylesheet">
+    <link rel="icon" href="data:,">
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            /* Slate 900 */
+            --sidebar-bg: rgba(30, 41, 59, 0.7);
+            /* Slate 800 + Opacity */
+            --glass-border: 1px solid rgba(255, 255, 255, 0.1);
+            --accent-color: #3b82f6;
+            /* Blue 500 */
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-color);
+            color: var(--text-primary);
+            height: 100vh;
+            display: flex;
+            overflow: hidden;
+        }
+
+        /* Glassmorphism Classes */
+        .glass {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: var(--glass-border);
+        }
+
+        .glass-panel {
+            background: rgba(30, 41, 59, 0.6);
+            backdrop-filter: blur(16px);
+            border-right: var(--glass-border);
+        }
+
+        .sidebar {
+            width: 280px;
+            display: flex;
+            flex-direction: column;
+            z-index: 10;
+            padding: 20px;
+            box-sizing: border-box;
+            transition: width 0.3s ease, padding 0.3s ease, opacity 0.3s ease;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        .sidebar.collapsed {
+            width: 0;
+            padding-left: 0;
+            padding-right: 0;
+            opacity: 0;
+            border: none;
+        }
+
+        .main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            background: radial-gradient(circle at top right, #1e293b 0%, #0f172a 60%);
+        }
+
+        .brand {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .brand span {
+            font-size: 12px;
+            background: var(--accent-color);
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+
+        /* Section Headers */
+        .section-title {
+            font-size: 12px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin: 20px 0 10px 0;
+            font-weight: 600;
+        }
+
+        /* Lists */
+        .list-item {
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 4px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .list-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateX(2px);
+        }
+
+        .list-item.active {
+            background: rgba(59, 130, 246, 0.2);
+            border: 1px solid rgba(59, 130, 246, 0.5);
+        }
+
+        /* Status Dot */
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        .status-connected {
+            background: #10b981;
+            box-shadow: 0 0 8px #10b981;
+        }
+
+        .status-connecting {
+            background: #f59e0b;
+            animation: pulse 1s infinite;
+        }
+
+        .status-error {
+            background: #ef4444;
+        }
+
+        .status-stopped {
+            background: #64748b;
+        }
+
+        @keyframes pulse {
+            0% {
+                opacity: 0.5;
+            }
+
+            100% {
+                opacity: 1;
+            }
+        }
+
+        /* Chat Area */
+        .chat-area {
+            flex: 1;
+            overflow-y: auto;
+            padding: 30px;
+            scroll-behavior: smooth;
+        }
+
+        .entry {
+            margin-bottom: 24px;
+            animation: fadeIn 0.3s ease-up;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .bubble {
+            max-width: 80%;
+            padding: 16px;
+            border-radius: 12px;
+            line-height: 1.7;
+            font-size: 15px;
+            user-select: text;
+            -webkit-user-select: text;
+            cursor: text;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+        }
+
+        .user-bubble {
+            background: var(--accent-color);
+            color: white;
+            margin-left: auto;
+            border-bottom-right-radius: 2px;
+        }
+
+        .ai-bubble {
+            background: rgba(255, 255, 255, 0.05);
+            border: var(--glass-border);
+            border-bottom-left-radius: 2px;
+            white-space: pre-wrap;
+        }
+
+        .tool-bubble {
+            background: #0f172a;
+            border: 1px solid #334155;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13px;
+            color: #cbd5e0;
+            overflow-x: auto;
+            max-width: 100%;
+            user-select: text;
+            -webkit-user-select: text;
+            cursor: text;
+        }
+
+        /* Input Area */
+        .input-container {
+            padding: 20px;
+            background: rgba(15, 23, 42, 0.9);
+            border-top: var(--glass-border);
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            backdrop-filter: blur(10px);
+        }
+
+        input[type="text"] {
+            flex: 1;
+            background: rgba(30, 41, 59, 0.5);
+            border: 1px solid #334155;
+            color: white;
+            padding: 14px;
+            border-radius: 8px;
+            font-family: 'Inter', sans-serif;
+            outline: none;
+            transition: border 0.2s;
+        }
+
+        input[type="text"]:focus {
+            border-color: var(--accent-color);
+        }
+
+        button.send-btn {
+            background: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 0 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        button.send-btn:hover {
+            background: #2563eb;
+        }
+
+        .server-toggle {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 10px;
+            border-radius: 999px;
+            border: 1px solid rgba(148, 163, 184, 0.3);
+            background: rgba(15, 23, 42, 0.6);
+            color: #cbd5e1;
+            font-size: 12px;
+        }
+
+        .server-status {
+            font-weight: 600;
+            color: #94a3b8;
+            min-width: 30px;
+            text-align: center;
+        }
+
+        .server-status.on {
+            color: #34d399;
+        }
+
+        .mode-hint {
+            font-size: 11px;
+            color: #94a3b8;
+            white-space: nowrap;
+        }
+
+        .status-badge {
+            padding: 6px 10px;
+            border-radius: 999px;
+            border: 1px solid rgba(148, 163, 184, 0.3);
+            background: rgba(15, 23, 42, 0.6);
+            color: #cbd5e1;
+            font-size: 12px;
+            min-width: 130px;
+            /* Slight increase for English/Status text */
+            text-align: center;
+        }
+
+        .status-idle {
+            color: #94a3b8;
+        }
+
+        .status-llm {
+            color: #f59e0b;
+            /* [UI 개선] 분석중 상태를 눈에 띄게 (Amber-500) */
+            font-weight: bold;
+            text-shadow: 0 0 5px rgba(245, 158, 11, 0.3);
+            animation: pulseText 1.5s infinite;
+        }
+
+        @keyframes pulseText {
+            0% {
+                opacity: 0.7;
+            }
+
+            50% {
+                opacity: 1;
+            }
+
+            100% {
+                opacity: 0.7;
+            }
+        }
+
+        .status-tool {
+            color: #fbbf24;
+        }
+
+        .status-wait {
+            color: #a78bfa;
+        }
+
+        .status-error {
+            color: #f87171;
+        }
+
+        /* ------------------------------------------------------------- */
+        /* [UI 개선] 로딩 인디케이터 (Thinking...) */
+        .typing-indicator {
+            display: none;
+            /* 기본 숨김 */
+            align-items: center;
+            gap: 5px;
+            padding: 10px 15px;
+            background: rgba(30, 41, 59, 0.5);
+            border-radius: 12px;
+            border: 1px solid #334155;
+            color: #94a3b8;
+            font-size: 12px;
+            width: fit-content;
+            margin: 5px 0;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .typing-dot {
+            width: 5px;
+            height: 5px;
+            background: #94a3b8;
+            border-radius: 50%;
+            animation: bounce 1.4s infinite ease-in-out both;
+        }
+
+        .typing-dot:nth-child(1) {
+            animation-delay: -0.32s;
+        }
+
+        .typing-dot:nth-child(2) {
+            animation-delay: -0.16s;
+        }
+
+        @keyframes bounce {
+
+            0%,
+            80%,
+            100% {
+                transform: scale(0);
+            }
+
+            40% {
+                transform: scale(1);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(5px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Result Cards (Viewer) */
+        .result-card {
+            background: #1e293b;
+            border-radius: 8px;
+            padding: 16px;
+            margin-top: 10px;
+            border: 1px solid #334155;
+        }
+
+        .result-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+
+        .result-table th {
+            text-align: left;
+            color: #94a3b8;
+            padding: 8px;
+            border-bottom: 1px solid #334155;
+        }
+
+        .result-table td {
+            padding: 8px;
+            border-bottom: 1px solid #1e293b;
+            color: #e2e8f0;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 100;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(4px);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .modal.show {
+            display: flex;
+            opacity: 1;
+        }
+
+        .modal-box {
+            width: 600px;
+            max-height: 80vh;
+            overflow: hidden;
+            background: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
+            transform: scale(0.95);
+            transition: transform 0.3s;
+        }
+
+        .modal.show .modal-box {
+            transform: scale(1);
+        }
+
+        .tab-bar {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .tab-btn {
+            flex: 1;
+            background: #0f172a;
+            border: 1px solid #334155;
+            color: #cbd5e0;
+            padding: 8px 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .tab-btn.active {
+            background: #1e293b;
+            border-color: #475569;
+            color: #f8fafc;
+        }
+
+        .tab-panel {
+            width: 100%;
+            max-height: 65vh;
+            overflow-y: auto;
+            padding-right: 6px;
+        }
+
+        input,
+        select,
+        textarea {
+            width: 100%;
+            background: #0f172a;
+            border: 1px solid #334155;
+            color: white;
+            padding: 10px;
+            border-radius: 6px;
+            box-sizing: border-box;
+            margin-bottom: 15px;
+        }
+
+        /* Toggle Switch */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 40px;
+            height: 20px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            inset: 0;
+            background-color: #334155;
+            transition: .4s;
+            border-radius: 34px;
+            cursor: pointer;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 14px;
+            width: 14px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked+.slider {
+            background-color: var(--accent-color);
+        }
+
+        input:checked+.slider:before {
+            transform: translateX(20px);
+        }
+
+        /* [UI 개선] 도구 아코디언 및 복사 버튼 스타일 */
+        .tool-accordion-item {
+            border: 1px solid #334155;
+            border-radius: 6px;
+            margin-bottom: 8px;
+            background: rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+
+        .tool-accordion-header {
+            padding: 10px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            user-select: none;
+            transition: background 0.2s;
+        }
+
+        .tool-accordion-header:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .tool-accordion-name {
+            color: #60a5fa;
+            font-weight: 600;
+            font-size: 13px;
+        }
+
+        .tool-accordion-content {
+            display: none;
+            padding: 12px;
+            border-top: 1px solid #334155;
+            background: rgba(0, 0, 0, 0.3);
+        }
+
+        .tool-accordion-item.open .tool-accordion-content {
+            display: block;
+        }
+
+        .copy-btn {
+            background: #334155;
+            color: #cbd5e1;
+            border: 1px solid #475569;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .copy-btn:hover {
+            background: #475569;
+            color: #fff;
+        }
+
+        .schema-pre {
+            background: #000;
+            color: #34d399;
+            padding: 10px;
+            border-radius: 4px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            margin-top: 8px;
+            overflow-x: auto;
+            position: relative;
+        }
+
+        .tool-accordion-item.disabled {
+            opacity: 0.5;
+            filter: grayscale(0.5);
+        }
+
+        .tool-checkbox {
+            width: 16px !important;
+            height: 16px !important;
+            margin: 0 !important;
+            cursor: pointer;
+        }
+
+        /* [UI 개선] 아코디언 & 로그 토글 스타일 */
+        /* [UI 개선] 아코디언 & 로그 토글 스타일 */
+        .section-title {
+            cursor: pointer;
+            user-select: none;
+            display: flex;
+            align-items: center;
+            /* Left align arrow */
+            gap: 15px;
+            /* Increase gap for clarity */
+            /* Space between arrow and text */
+            margin: 20px 0 10px 0;
+            /* Original margin from .section-title rule */
+            padding-left: 5px;
+            /* Slight padding for the arrow box */
+        }
+
+        /* 화살표를 왼쪽으로 이동 (::before 사용) */
+        .section-title::before {
+            content: '►';
+            /* Default collapsed (Right) */
+            font-size: 10px;
+            transition: transform 0.2s;
+            opacity: 0.7;
+            display: inline-block;
+            width: 15px;
+            /* Fixed width for arrow to prevent jitter */
+            text-align: center;
+        }
+
+        /* 화살표 회전 로직 수정: .collapsed가 아닐 때(즉, 펼쳐져 있을 때) 아래로 회전 */
+        /* 기본 상태: 펼쳐짐 (Arrows should be Down) */
+        /* 하지만 사용자는 "Tools is reversed"라고 함. 
+           HTML 구조상 .section-content에 .collapsed가 없으면 펼쳐진 상태임.
+           따라서 펼쳐진 상태일 때 Arrow는 Down(▼)이어야 함.
+           
+           현재: .section-title::before { content: '►' }
+           펼쳐지면 (즉 no .collapsed class on title) -> Rotate 90deg to make it Down?
+           Or just change default content to '▼' and rotate -90 when collapsed?
+           
+           Let's go with: Default (Open) = '▼'. Collapsed = Rotate -90 (points Right).
+        */
+        .section-title::before {
+            content: '▼';
+        }
+
+        .section-title.collapsed::before {
+            transform: rotate(-90deg);
+        }
+
+        /* 기존 ::after 제거 */
+        .section-title::after {
+            content: none;
+        }
+
+        .section-content {
+            transition: all 0.3s ease;
+            overflow: hidden;
+        }
+
+        .section-content.collapsed {
+            display: none !important;
+        }
+
+        /* 로그 숨김 처리 */
+        body.hide-logs .tool-bubble {
+            display: none !important;
+        }
+
+        /* 로그가 숨겨졌을 때, 로그 대신 작은 아이콘만 표시하고 싶다면 아래와 같이 변형 가능하지만, 
+           사용자 요청은 "보이거나 안 보이거나"이므로 완전 숨김 처리함. 
+           다만, 빈 줄이 생기는 것을 방지하기 위해 entry 자체를 숨길 수도 있음.
+           하지만 entry 내에 tool-bubble만 있는 경우도 있고 섞인 경우도 있을 수 있음.
+           현재 구조상 tool-bubble은 별도 entry로 생성됨 (renderData 함수 확인).
+           따라서 .entry:has(.tool-bubble) 방식으로 숨기는게 좋으나, :has는 최신 브라우저용.
+           JS로 처리하는게 확실하지만 CSS로 일단 tool-bubble만 숨겨도 됨.
+        */
+        body.hide-logs .entry:has(.tool-bubble) {
+            display: none;
+        }
+
+        /* [UI 개선] 사이드바 컨트롤 패널 스타일 */
+        .control-panel {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid #334155;
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .control-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 13px;
+            color: #cbd5e1;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Sidebar -->
+    <div class="sidebar glass-panel">
+        <div
+            style="padding: 15px 20px; font-weight: 600; font-size: 14px; border-bottom: var(--glass-border); display: flex; align-items: center; gap: 8px; white-space: nowrap;">
+            <div
+                style="width: 16px; height: 16px; background: linear-gradient(135deg, #3b82f6, #8b5cf6); border-radius: 3px;">
+            </div>
+            ASDK Studio <span id="sidebar-version"
+                style="font-size:11px; color:rgba(255,215,0,0.7); margin-left:auto;">v1.0</span>
+        </div>
+
+        <div style="padding: 10px 20px;">
+            <button onclick="startNewChat()"
+                style="width:100%; padding:8px; background:linear-gradient(135deg, #3b82f6, #2563eb); color:white; border:none; border-radius:6px; cursor:pointer; font-weight:600; font-size:13px; display:flex; justify-content:center; align-items:center; gap:5px;">
+                <span>+</span> New Chat
+            </button>
+        </div>
+
+        <div class="section-title" onclick="toggleSection(this, 'control-panel')"><span>Controls</span></div>
+        <div id="control-panel" class="control-panel section-content">
+            <!-- AI Mode -->
+            <div class="control-row">
+                <span>🤖 AI Mode</span>
+                <label class="switch" style="transform:scale(0.8);">
+                    <input type="checkbox" id="ai-mode-check" checked>
+                    <span class="slider"></span>
+                </label>
+            </div>
+            <!-- Tool Logs -->
+            <div class="control-row">
+                <span>👁️ Tool Logs</span>
+                <label class="switch" style="transform:scale(0.8);">
+                    <input type="checkbox" id="log-mode-check" checked onchange="toggleLogs()">
+                    <span class="slider"></span>
+                </label>
+            </div>
+            <!-- Server Mode -->
+            <div class="control-row">
+                <span style="display:flex; align-items:center; gap:5px;">
+                    🖥️ Server
+                    <span id="server-mode-status" class="server-status" style="font-size:10px;">OFF</span>
+                </span>
+                <label class="switch" style="transform:scale(0.8);">
+                    <input type="checkbox" id="server-mode-check">
+                    <span class="slider"></span>
+                </label>
+            </div>
+
+            <!-- Settings Button Moved Here -->
+            <div style="border-top: 1px solid #334155; margin-top: 10px; padding-top: 10px;">
+                <button onclick="openProfileModal()"
+                    style="width:100%; padding:8px; background: #334155; color:white; border:none; border-radius:6px; cursor:pointer; font-size:13px; display:flex; justify-content:center; align-items:center; gap:5px;">
+                    ⚙️ Settings
+                </button>
+            </div>
+        </div>
+
+
+        <div class="section-title" onclick="toggleSection(this, 'server-list')"><span>Servers</span></div>
+        <div id="server-list" class="section-content">
+            <!-- JS Populated -->
+        </div>
+
+        <div class="section-title" id="tools-section-title" onclick="toggleSection(this, 'tool-list')">
+            <span>Tools</span> <!-- Wrap in span for consistency -->
+        </div>
+        <div id="tool-list" class="section-content" style="flex: 1; overflow-y: auto; max-height: 300px;"></div>
+
+        <div class="section-title" onclick="toggleSection(this, 'history-list')">
+            <span>History</span>
+        </div>
+        <div id="history-list" class="section-content" style="flex: 1; overflow-y: auto;">
+            <!-- JS Populated -->
+        </div>
+
+
+    </div>
+
+    <!-- Main Content -->
+    <div class="main">
+        <div
+            style="padding: 16px 30px; display: flex; justify-content: space-between; align-items: center; border-bottom: var(--glass-border);">
+            <div style="display: flex; align-items: center; gap: 15px;">
+                <button onclick="toggleSidebar()" title="Toggle Sidebar"
+                    style="background:none; border:none; color:#94a3b8; font-size:20px; cursor:pointer; padding:0; display:flex; align-items:center; transition:color 0.2s;">
+                    ☰
+                </button>
+                <div style="font-weight: 600;">💎 MCP ASDK Studio v1</div>
+            </div>
+            <div style="display: flex; gap: 15px; align-items: center;">
+                <select id="header-persona-select" onchange="onSwitchPersona(this.value)"
+                    style="width:auto; min-width:140px; margin:0; padding:4px 8px; font-size:12px; height:32px; border-radius:16px; background: rgba(59, 130, 246, 0.2); border: 1px solid rgba(59, 130, 246, 0.5); color: #f8fafc;">
+                    <option value="">Select Persona</option>
+                </select>
+                <select id="header-profile-select" onchange="switchProfile(this.value)"
+                    style="width:auto; min-width:140px; margin:0; padding:4px 8px; font-size:12px; height:32px; border-radius:16px;">
+                    <option value="">Select Profile</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="chat-area" id="chat-box">
+            <div class="entry">
+                <div class="bubble ai-bubble">
+                    Welcome to <b>💎 MCP ASDK Studio v1</b>.<br>
+                    Advanced Intelligence Edition with Vertical AI capabilities.
+                </div>
+            </div>
+        </div>
+
+        <!-- [UI 개선] 로딩 인디케이터 영역 -->
+        <div id="loading-indicator" class="typing-indicator">
+            <span>Thinking</span>
+            <div class="typing-dot"></div>
+            <div class="typing-dot"></div>
+            <div class="typing-dot"></div>
+        </div>
+
+        <div class="input-container">
+            <input type="text" id="user-input" placeholder="Enter a ticker or question..."
+                onkeypress="handleKey(event)">
+            <!-- IME Indicator -->
+            <div id="ime-indicator"
+                style="font-size: 12px; color: #94a3b8; font-weight: bold; background: rgba(255,255,255,0.1); padding: 4px 8px; border-radius: 4px; min-width: 24px; text-align: center;">
+                A</div>
+            <div id="status-badge" class="status-badge status-idle">Ready</div>
+            <button class="send-btn" onclick="sendMsg()">Send</button>
+        </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div id="profile-modal" class="modal">
+        <div class="modal-box">
+            <div class="tab-bar">
+                <button id="tab-ai" class="tab-btn active" onclick="switchSettingsTab('ai')">AI Profiles</button>
+                <button id="tab-server" class="tab-btn" onclick="switchSettingsTab('server')">Servers</button>
+                <button id="tab-system" class="tab-btn" onclick="switchSettingsTab('system')">System</button>
+            </div>
+
+            <div id="settings-ai" class="tab-panel">
+                <h3 style="margin-top:0">⚙️ AI Profiles</h3>
+                <select id="profile-select" onchange="loadProfileForm(this.value)">
+                    <option value="new">+ Create New Profile</option>
+                </select>
+
+                <label>Name</label><input id="p-name" type="text" placeholder="Stock Advisor">
+                <label>Model</label>
+                <select id="p-model" onchange="autoFillBaseUrl()">
+                    <option value="">-- Select Model --</option>
+                    <!-- OpenAI -->
+                    <optgroup label="OpenAI (Real-World)">
+                        <option value="gpt-4o">GPT-4o (Fast & Accurate)</option>
+                        <option value="gpt-4o-mini">GPT-4o Mini (Cost Effective)</option>
+                        <option value="o1-preview">OpenAI o1-preview (Reasoning)</option>
+                        <option value="o1-mini">OpenAI o1-mini (Fast Reasoning)</option>
+                    </optgroup>
+                    <!-- Google -->
+                    <optgroup label="Google Gemini">
+                        <option value="gemini-1.5-flash">Gemini 1.5 Flash (Fast)</option>
+                        <option value="gemini-1.5-pro">Gemini 1.5 Pro (Powerful)</option>
+                        <option value="gemini-2.0-flash-exp">Gemini 2.0 Flash (Experimental)</option>
+                    </optgroup>
+                    <!-- DeepSeek -->
+                    <optgroup label="DeepSeek">
+                        <option value="deepseek-chat">DeepSeek V3 (Chat)</option>
+                        <option value="deepseek-reasoner">DeepSeek R1 (Reasoning)</option>
+                    </optgroup>
+                    <!-- xAI -->
+                    <optgroup label="xAI Grok">
+                        <option value="grok-2-latest">Grok 2 (Latest)</option>
+                        <option value="grok-2-vision-latest">Grok 2 Vision</option>
+                    </optgroup>
+                    <!-- Custom -->
+                    <optgroup label="Custom">
+                        <option value="custom">Custom Model ID...</option>
+                    </optgroup>
+                </select>
+                <input id="p-model-custom" type="text" placeholder="Enter custom model name"
+                    style="display:none; margin-top:5px;">
+                <label>API Key</label><input id="p-key" type="password">
+                <label>Base URL</label><input id="p-url" type="text" placeholder="https://api.openai.com/v1">
+                <label>System Prompt</label><textarea id="p-sys" rows="3"></textarea>
+
+                <div style="display:flex; justify-content: flex-end; gap:10px; margin-top:20px;">
+                    <button onclick="deleteProfile()" id="btn-delete"
+                        style="padding:8px 16px; background:#ef4444; color:white; border:none; border-radius:6px; cursor:pointer; display:none; margin-right:auto;">Delete</button>
+                    <button onclick="testProfile()"
+                        style="padding:8px 16px; background:#6366f1; color:white; border:none; border-radius:6px; cursor:pointer;">Test
+                        Key</button>
+                    <button onclick="saveProfile()"
+                        style="padding:8px 16px; background:#10b981; color:white; border:none; border-radius:6px; cursor:pointer;">Save</button>
+                    <button onclick="closeModals()"
+                        style="padding:8px 16px; background:#64748b; color:white; border:none; border-radius:6px; cursor:pointer;">Close</button>
+                </div>
+            </div>
+
+            <div id="settings-server" class="tab-panel" style="display:none;">
+                <h3 style="margin-top:0">🧰 Manage Servers</h3>
+                <div style="border-top:1px solid #334155; margin-top:15px; padding-top:15px;">
+                    <label>Server List</label>
+                    <div style="display:flex; gap:8px; align-items:center; margin-bottom:10px;">
+                        <select id="srv-select" onchange="selectServer(this.value)"></select>
+                    </div>
+                    <label>Server Name (ID)</label><input id="srv-name" type="text" placeholder="e.g. stack_helper">
+
+                    <!-- Transport Type Selection -->
+                    <label style="margin-top:10px;">Transport Type</label>
+                    <div style="display:flex; gap:15px; margin-bottom:10px;">
+                        <label style="font-weight:normal; display:flex; align-items:center; gap:5px; cursor:pointer;">
+                            <input type="radio" name="transport" value="stdio" checked
+                                onchange="toggleTransport('stdio')"> Stdio (Local)
+                        </label>
+                        <label style="font-weight:normal; display:flex; align-items:center; gap:5px; cursor:pointer;">
+                            <input type="radio" name="transport" value="http" onchange="toggleTransport('http')"> HTTP
+                            (Remote)
+                        </label>
+                        <label style="font-weight:normal; display:flex; align-items:center; gap:5px; cursor:pointer;">
+                            <input type="radio" name="transport" value="sse" onchange="toggleTransport('sse')"> SSE
+                            (Streaming)
+                        </label>
+                    </div>
+
+                    <!-- Area 1: Stdio Inputs -->
+                    <div id="trans-stdio-area">
+                        <label>Command</label><input id="srv-cmd" type="text"
+                            placeholder="python, npx, or absolute path">
+                        <label>Arguments (one per line)</label><textarea id="srv-args" rows="4"
+                            placeholder="C:/path/to/script.py"></textarea>
+                    </div>
+
+                    <!-- Area 2: Network Inputs (HTTP/SSE) -->
+                    <div id="trans-net-area" style="display:none;">
+                        <label>URL</label><input id="srv-url" type="text" placeholder="http://localhost:8000/sse">
+                        <label>Headers (Key=Value, one per line)</label><textarea id="srv-headers" rows="3"
+                            placeholder="Authorization=Bearer token"></textarea>
+                    </div>
+
+                    <div style="display:flex; justify-content: flex-end; gap:10px; margin-top:10px;">
+                        <button id="btn-delete-server" onclick="deleteServer()"
+                            style="padding:8px 16px; background:#ef4444; color:white; border:none; border-radius:6px; cursor:pointer; display:none; margin-right:auto;">Delete</button>
+                        <button onclick="testServer()"
+                            style="padding:8px 16px; background:#6366f1; color:white; border:none; border-radius:6px; cursor:pointer;">Test
+                            Connection</button>
+                        <button onclick="saveServer()"
+                            style="padding:8px 16px; background:#10b981; color:white; border:none; border-radius:6px; cursor:pointer;">Save
+                            & Restart</button>
+                        <button onclick="closeModals()"
+                            style="padding:8px 16px; background:#64748b; color:white; border:none; border-radius:6px; cursor:pointer;">Close</button>
+                    </div>
+                    <div id="server-tools-area"
+                        style="margin-top:15px; display:none; background:rgba(0,0,0,0.2); border-radius:6px; padding:10px;">
+                        <h4 style="margin:0 0 10px 0; font-size:13px; color:#94a3b8;">🛠️ Available Tools</h4>
+                        <div id="server-tools-list" style="max-height:150px; overflow-y:auto; font-size:12px;">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Missing System Container Fixed -->
+            <div id="settings-system-container"></div>
+
+            <div id="settings-packs" class="tab-panel" style="display:none;">
+                <h3 style="margin-top:0">📦 Intelligence Packs (IQ-Pack)</h3>
+                <p style="font-size: 12px; color: #94a3b8; margin-bottom: 15px;">
+                    Select an Intelligence Pack to change the AI's core behavior, personas, and specialized tools.
+                </p>
+                <div
+                    style="padding: 20px; background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: 8px;">
+                    <!-- Section 1: Formal Standard Packs (L2) -->
+                    <label
+                        style="font-size: 13px; color: #60a5fa; margin-bottom: 4px; display: block; font-weight:600;">Standard
+                        IQ-Packs (Verified)</label>
+                    <select id="sys-pack-manifest-select" onchange="handlePackSelection(this.value)"
+                        style="background: #0f172a; border-color: #3b82f6; height: 40px; font-size: 14px; margin-bottom: 15px; width: 100%;">
+                        <option value="">-- Select Standard Pack --</option>
+                    </select>
+
+                    <!-- Section 2: Raw Directory Access (L1) -->
+                    <label style="font-size: 13px; color: #94a3b8; margin-bottom: 4px; display: block;">Raw Directory
+                        Access (Dev)</label>
+                    <select id="sys-pack-dir-select" onchange="handlePackSelection(this.value)"
+                        style="background: #1e293b; border-color: #475569; height: 35px; font-size: 13px; color: #cbd5e1; width: 100%;">
+                        <option value="">-- All Directories --</option>
+                    </select>
+
+                    <!-- [UI Add] Pack Info Display -->
+                    <div id="pack-info-display" style="margin-top:20px; display:none; animation:fadeIn 0.3s ease;">
+                        <div style="font-weight:600; font-size:14px; margin-bottom:5px; color:#60a5fa;" id="pi-name">
+                            Pack Name</div>
+                        <div style="font-size:12px; color:#cbd5e1; margin-bottom:10px; line-height:1.5;" id="pi-desc">
+                            Description...</div>
+
+                        <div style="display:flex; gap:8px; flex-wrap:wrap;" id="pi-caps">
+                            <!-- Capabilities Badges -->
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 20px; padding: 10px; background: rgba(0,0,0,0.2); border-radius: 6px;">
+                        <ul style="margin:0; padding:0; font-size: 11px; color: #94a3b8; list-style: none;">
+                            <li style="margin-bottom:5px;">ℹ️ <b>Selection is Immediate:</b> Switching the pack above
+                                instantly updates the system path.</li>
+                            <li style="margin-bottom:5px;">✅ Info from <code>intro.json</code> is displayed
+                                automatically.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div style="display:flex; justify-content: flex-end; gap:10px; margin-top:20px;">
+                    <button onclick="closeModals()"
+                        style="padding:8px 16px; background:#64748b; color:white; border:none; border-radius:6px; cursor:pointer;">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let api = null;
+        let profiles = [];
+        let servers = {};
+
+        function initialize() {
+            api = window.pywebview?.api;
+            if (!api || typeof api.get_tools !== 'function') {
+                setTimeout(initialize, 200);
+                return;
+            }
+            initData();
+            setInterval(updateServerStatus, 5000);
+        }
+
+        window.addEventListener('pywebviewready', () => { setTimeout(initialize, 100); });
+
+        async function initData() {
+            updateServerModeLabel();
+            const serverToggle = document.getElementById('server-mode-check');
+            if (serverToggle) serverToggle.addEventListener('change', updateServerModeLabel);
+
+            await updateServerStatus();
+            if (serverToggle?.checked) await loadTools();
+            await loadHistoryList();
+            await loadProfiles();
+            await loadServerList();
+            await loadPersonas();
+            await loadSystemSettings();
+        }
+
+        async function updateServerStatus() {
+            try {
+                const statuses = await api.get_server_status();
+                const container = document.getElementById('server-list');
+                container.innerHTML = '';
+                statuses.forEach(s => {
+                    const div = document.createElement('div');
+                    div.className = 'list-item';
+                    div.innerHTML = `<span>${s.name}</span><span class="status-dot status-${s.status}"></span>`;
+                    container.appendChild(div);
+                });
+            } catch (e) { }
+        }
+
+        async function loadTools() {
+            try {
+                const res = await api.get_tools();
+                const container = document.getElementById('tool-list');
+                container.innerHTML = '';
+
+                // [UI Improvement] Group tools by server
+                const groups = {};
+                Object.values(res.tools).forEach(t => {
+                    const srv = t.server || 'Unknown';
+                    if (!groups[srv]) groups[srv] = [];
+                    groups[srv].push(t);
+                });
+
+                Object.keys(groups).forEach(srvName => {
+                    const groupTools = groups[srvName];
+                    const allEnabled = groupTools.every(t => t.enabled);
+                    const anyEnabled = groupTools.some(t => t.enabled);
+                    // Toggle state: If any is on, show as ON (turning off turns all off, turning on turns all on)
+                    const isChecked = anyEnabled;
+
+                    const details = document.createElement('details');
+                    details.open = true; // Default expanded
+                    details.style.marginBottom = '10px';
+                    details.id = `group-${srvName}`;
+
+                    const summary = document.createElement('summary');
+                    summary.style.cursor = 'pointer';
+                    summary.style.marginBottom = '5px';
+                    summary.style.fontSize = '12px';
+                    summary.style.userSelect = 'none';
+
+                    // [UI Add] Server-wide toggle switch
+                    summary.innerHTML = `
+                        <div style="display:inline-flex; align-items:center; justify-content:space-between; width:95%;">
+                            <div style="display:flex; align-items:center;">
+                                <span style="color:#e2e8f0; font-weight:600;">${srvName}</span> 
+                                <span style="font-size:11px; color:#64748b; margin-left:5px;">(${groupTools.length})</span>
+                            </div>
+                            <label class="switch" style="transform:scale(0.7); margin:0;" onclick="event.stopPropagation()">
+                                <input type="checkbox" ${isChecked ? 'checked' : ''} onchange="onToggleServer(event, '${srvName}')">
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                    `;
+                    details.appendChild(summary);
+
+                    groups[srvName].forEach(t => {
+                        const div = document.createElement('div');
+                        div.className = 'list-item' + (t.enabled ? '' : ' disabled');
+                        div.style.marginLeft = '10px';
+                        div.innerHTML = `
+                            <div style="display:flex; align-items:center; gap:8px;">
+                                <input type="checkbox" class="tool-checkbox" ${t.enabled ? 'checked' : ''} 
+                                    onclick="onToggleTool(event, '${t.server}', '${t.name}')">
+                                <span style="font-weight:500">${t.name}</span>
+                            </div>`;
+                        details.appendChild(div);
+                    });
+                    container.appendChild(details);
+                });
+            } catch (e) {
+                console.error("loadTools error:", e);
+            }
+        }
+
+        async function onToggleServer(event, serverName) {
+            // event.preventDefault() for label click handled in HTML, but here we need to handle change
+            event.stopPropagation(); // prevent details toggle
+            const enabled = event.target.checked;
+
+            try {
+                // Optimistic UI update
+                const group = document.getElementById(`group-${serverName}`);
+                if (group) {
+                    const checkboxes = group.querySelectorAll('.tool-checkbox');
+                    const items = group.querySelectorAll('.list-item');
+
+                    checkboxes.forEach(cb => cb.checked = enabled);
+                    items.forEach(item => {
+                        if (enabled) item.classList.remove('disabled');
+                        else item.classList.add('disabled');
+                    });
+                }
+
+                // Backend call
+                const res = await api.toggle_server_tools(serverName, enabled);
+                if (res.status !== 'ok') {
+                    alert('Server toggle failed: ' + res.message);
+                    // Rollback logic might be needed on failure
+                    loadTools(); // Reload
+                }
+            } catch (e) {
+                alert('Error: ' + e.message);
+                loadTools();
+            }
+        }
+
+        async function loadHistoryList() {
+            const list = await api.load_history_list();
+            const container = document.getElementById('history-list');
+            container.innerHTML = '';
+            list.forEach(h => {
+                const div = document.createElement('div');
+                div.className = 'list-item';
+                div.style.display = 'flex';
+                div.style.justifyContent = 'space-between';
+                div.style.alignItems = 'center';
+
+                const textSpan = document.createElement('span');
+                textSpan.innerText = h.display;
+                textSpan.style.flex = '1';
+                textSpan.onclick = () => loadSession(h.filename);
+
+                const delBtn = document.createElement('span');
+                delBtn.innerText = '🗑️';
+                delBtn.style.fontSize = '12px';
+                delBtn.style.cursor = 'pointer';
+                delBtn.style.opacity = '0.5';
+                delBtn.style.paddingLeft = '10px';
+                delBtn.title = "Delete this chat";
+
+                delBtn.onmouseover = () => delBtn.style.opacity = '1';
+                delBtn.onmouseout = () => delBtn.style.opacity = '0.5';
+                delBtn.onclick = (e) => {
+                    e.stopPropagation();
+                    deleteSession(h.filename);
+                };
+
+                div.appendChild(textSpan);
+                div.appendChild(delBtn);
+                container.appendChild(div);
+            });
+        }
+
+        async function deleteSession(filename) {
+            if (!confirm('Are you sure you want to permanently delete this record?')) return;
+            try {
+                const res = await api.delete_history_session(filename);
+                if (res.status === 'deleted') {
+                    await loadHistoryList();
+                    // If currently viewing, reset? (optional)
+                } else {
+                    alert('Deletion failed');
+                }
+            } catch (e) {
+                console.error(e);
+            }
+        }
+
+        async function loadSession(filename) {
+            const msgs = await api.load_history_session(filename);
+            const chatBox = document.getElementById('chat-box');
+            chatBox.innerHTML = '';
+            msgs.forEach(displayMessage);
+        }
+
+        async function startNewChat() {
+            try {
+                // Clear UI immediately
+                document.getElementById('chat-box').innerHTML = `
+                    <div class="entry">
+                        <div class="bubble ai-bubble">
+                            A new conversation has started.<br>
+                            How can I help you?
+                        </div>
+                    </div>`;
+
+                // Backend: create new session file
+                await api.start_new_chat();
+
+                // Refresh history list
+                await loadHistoryList();
+            } catch (e) {
+                console.error(e);
+            }
+        }
+
+        async function clearHistory() {
+            if (!confirm('Are you sure you want to delete all history?')) return;
+            try {
+                await api.clear_history();
+                await loadHistoryList();
+            } catch (e) {
+                alert('Error during deletion: ' + e.message);
+            }
+        }
+
+        function updateServerModeLabel() {
+            const toggle = document.getElementById('server-mode-check');
+            const status = document.getElementById('server-mode-status');
+            const on = toggle.checked;
+            status.textContent = on ? 'ON' : 'OFF';
+            status.classList.toggle('on', on);
+            document.getElementById('tools-section-title').style.display = on ? 'block' : 'none';
+            document.getElementById('tool-list').style.display = on ? 'block' : 'none';
+            if (on) loadTools();
+        }
+
+        function toggleLogs() {
+            const checkbox = document.getElementById('log-mode-check');
+            const isChecked = checkbox.checked;
+
+            if (isChecked) {
+                document.body.classList.remove('hide-logs');
+            } else {
+                document.body.classList.add('hide-logs');
+            }
+        }
+
+        function setStatusBadge(state, text) {
+            const badge = document.getElementById('status-badge');
+            badge.className = `status-badge status-${state}`;
+            badge.textContent = text;
+        }
+
+        async function sendMsg() {
+            const input = document.getElementById('user-input');
+            const btn = document.querySelector('.send-btn');
+            const loader = document.getElementById('loading-indicator');
+            const msg = input.value.trim();
+            if (!msg) return;
+
+            // [UI Improvement] Disable input and show loading
+            input.disabled = true;
+            btn.disabled = true;
+            btn.style.opacity = '0.5';
+            input.value = '';
+
+            loader.style.display = 'flex'; // Show loading bar
+            const chatBox = document.getElementById('chat-box'); // Scroll to bottom
+            chatBox.scrollTop = chatBox.scrollHeight;
+
+            const isAi = document.getElementById('ai-mode-check').checked;
+            const useServer = document.getElementById('server-mode-check')?.checked;
+
+            displayMessage({ role: 'user', content: msg });
+
+            // [UI Improvement] Change status text color and message
+            setStatusBadge('llm', '🔍 Analyzing...');
+
+            try {
+                const res = await api.chat(msg, isAi, useServer);
+                if (res.response) {
+                    displayMessage({ role: 'assistant', content: res.response });
+                    if (res.tool_calls_log) {
+                        res.tool_calls_log.forEach(log => renderData(log.result, undefined, `Result: ${log.tool}`));
+                    }
+                }
+            } catch (e) {
+                alert('Communication error: ' + e.message);
+                displayMessage({ role: 'assistant', content: '❌ An error occurred. Please try again later.' });
+            } finally {
+                // [UI Improvement] Restore status
+                input.disabled = false;
+                btn.disabled = false;
+                btn.style.opacity = '1';
+                loader.style.display = 'none';
+                input.focus();
+                setStatusBadge('idle', 'Ready');
+            }
+        }
+
+        function displayMessage(msg) {
+            const chatBox = document.getElementById('chat-box');
+            const div = document.createElement('div');
+            div.className = 'entry';
+            const isUser = msg.role === 'user';
+            div.innerHTML = `<div class="bubble ${isUser ? 'user-bubble' : 'ai-bubble'}">${formatText(msg.content)}</div>`;
+            chatBox.appendChild(div);
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+        function renderData(data, container = document.getElementById('chat-box'), title = 'DATA') {
+            const div = document.createElement('div');
+            div.className = 'entry';
+            const jsonStr = JSON.stringify(data, null, 2);
+
+            // [UI Improvement] Tool call results are collapsed by default with copy button
+            div.innerHTML = `
+                <div class="bubble tool-bubble" style="background: rgba(30, 41, 59, 0.4); border: 1px dashed #475569; padding: 10px;">
+                    <details>
+                        <summary style="font-size:11px; cursor:pointer; color:#94a3b8; outline:none; display:flex; justify-content:space-between; align-items:center;">
+                            <span>📦 ${title} (click to expand)</span>
+                            <button onclick="copyToolResult(event, this)" data-json='${jsonStr.replace(/'/g, "&#39;")}' 
+                                style="padding:4px 8px; background:#6366f1; color:white; border:none; border-radius:4px; cursor:pointer; font-size:10px; margin-left:10px;">
+                                📋 Copy JSON
+                            </button>
+                        </summary>
+                        <pre style="font-size:12px; margin-top:10px; color:#e2e8f0; max-height:300px; overflow-y:auto; background:rgba(0,0,0,0.3); padding:10px; border-radius:4px; white-space: pre-wrap; word-break: break-all;">${jsonStr}</pre>
+                    </details>
+                </div>`;
+            container.appendChild(div);
+            container.scrollTop = container.scrollHeight;
+        }
+
+        // [New Function] Copy tool result JSON to clipboard
+        function copyToolResult(event, button) {
+            event.stopPropagation(); // Prevent details toggle
+            const jsonStr = button.getAttribute('data-json');
+
+            try {
+                // Create temporary textarea for copying
+                const textArea = document.createElement("textarea");
+                textArea.value = jsonStr;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+
+                // Visual feedback
+                const originalText = button.textContent;
+                button.textContent = '✅ Copied!';
+                button.style.background = '#10b981';
+                setTimeout(() => {
+                    button.textContent = originalText;
+                    button.style.background = '#6366f1';
+                }, 2000);
+            } catch (err) {
+                console.error('Copy failed', err);
+                alert('복사 실패: ' + err.message);
+            }
+        }
+
+        function formatText(text) {
+            return text.replace(/\n/g, '<br>').replace(/\*\*(.*?)\*\*/g, '<b>$1</b>');
+        }
+
+        async function loadProfiles() {
+            const res = await api.get_profiles();
+            profiles = res.profiles;
+            const activeId = res.active_id;
+            const selHeader = document.getElementById('header-profile-select');
+            selHeader.innerHTML = '<option value="">Select Profile</option>';
+            profiles.forEach(p => {
+                const opt = document.createElement('option');
+                opt.value = p.id; opt.innerText = p.name;
+                if (p.id === activeId) opt.selected = true;
+                selHeader.appendChild(opt);
+            });
+            const pSel = document.getElementById('profile-select');
+            pSel.innerHTML = '<option value="new">+ Create New Profile</option>' +
+                profiles.map(p => `<option value="${p.id}">${p.name}</option>`).join('');
+
+            // Connect form load event when profile is selected
+            pSel.onchange = (e) => loadProfileForm(e.target.value);
+        }
+
+        async function switchProfile(id) { await api.activate_profile(id); await loadProfiles(); }
+
+        function openProfileModal() { document.getElementById('profile-modal').classList.add('show'); }
+        function closeModals() { document.getElementById('profile-modal').classList.remove('show'); }
+        function switchSettingsTab(tab) {
+            const tabs = ['ai', 'server', 'system', 'packs'];
+            tabs.forEach(t => {
+                const panel = document.getElementById(`settings-${t}`);
+                if (panel) panel.style.display = (t === tab) ? 'block' : 'none';
+                const btn = document.getElementById(`tab-${t}`);
+                if (btn) btn.classList.toggle('active', t === tab);
+            });
+            if (tab === 'system') loadSystemSettings();
+            if (tab === 'packs') loadPackSettings();
+        }
+
+        function loadProfileForm(id) {
+            const deleteBtn = document.getElementById('btn-delete');
+            if (id === 'new') {
+                document.getElementById('p-name').value = '';
+                document.getElementById('p-model').value = '';
+                document.getElementById('p-key').value = '';
+                document.getElementById('p-url').value = 'https://api.openai.com/v1';
+                document.getElementById('p-sys').value = '';
+                if (deleteBtn) deleteBtn.style.display = 'none';
+                return;
+            }
+            const profile = profiles.find(p => p.id === id);
+            if (profile) {
+                document.getElementById('p-name').value = profile.name || '';
+                document.getElementById('p-model').value = profile.model || '';
+                document.getElementById('p-key').value = '******';
+                document.getElementById('p-url').value = profile.base_url || '';
+                document.getElementById('p-sys').value = profile.system_prompt || '';
+                if (deleteBtn) deleteBtn.style.display = 'block';
+            }
+        }
+
+        function autoFillBaseUrl() {
+            const model = document.getElementById('p-model').value;
+            const urlInput = document.getElementById('p-url');
+            const customInput = document.getElementById('p-model-custom');
+
+            if (model === 'custom') {
+                customInput.style.display = 'block';
+            } else {
+                customInput.style.display = 'none';
+            }
+
+            // [Auto-Fill Logic]
+            if (model.startsWith('gpt-')) {
+                urlInput.value = 'https://api.openai.com/v1';
+            } else if (model.startsWith('gemini-')) {
+                // OpenAI-compatible endpoint for Google
+                urlInput.value = 'https://generativelanguage.googleapis.com/v1beta/openai/';
+            } else if (model.startsWith('deepseek-')) {
+                urlInput.value = 'https://api.deepseek.com';
+            } else if (model.startsWith('grok-')) {
+                urlInput.value = 'https://api.x.ai/v1';
+            }
+        }
+
+        async function testProfile() {
+            const key = document.getElementById('p-key').value;
+            const model = document.getElementById('p-model').value === 'custom'
+                ? document.getElementById('p-model-custom').value
+                : document.getElementById('p-model').value;
+            const url = document.getElementById('p-url').value;
+
+            if (!key || !model || !url) {
+                alert('Please fill in all fields.');
+                return;
+            }
+
+            const btn = event.target;
+            btn.disabled = true;
+            btn.textContent = 'Testing...';
+
+            try {
+                // [Fix] Pass profile ID for masked key handling
+                const profileId = document.getElementById('profile-select').value;
+                const result = await api.test_profile(key, model, url, profileId);
+                if (result.ok) {
+                    alert('✅ API Key is valid!');
+                } else {
+                    alert('❌ Test failed: ' + result.message);
+                }
+            } catch (e) {
+                alert('❌ Error: ' + e.message);
+            } finally {
+                btn.disabled = false;
+                btn.textContent = 'Test Key';
+            }
+        }
+
+        async function saveProfile() {
+            // ... (existing routine) ...
+            const name = document.getElementById('p-name').value;
+            const model = document.getElementById('p-model').value === 'custom'
+                ? document.getElementById('p-model-custom').value
+                : document.getElementById('p-model').value;
+            const key = document.getElementById('p-key').value;
+            const url = document.getElementById('p-url').value;
+            const sys = document.getElementById('p-sys').value;
+
+            if (!name || !model || !key || !url) {
+                alert('Please fill in all required fields.');
+                return;
+            }
+
+            const profileData = {
+                name: name,
+                model: model,
+                api_key: key === '******' ? undefined : key,
+                base_url: url,
+                system_prompt: sys
+            };
+
+            const currentId = document.getElementById('profile-select').value;
+            if (currentId !== 'new') {
+                profileData.id = currentId;
+            }
+
+            try {
+                await api.save_profile(profileData);
+                alert('✅ Profile saved!');
+                await loadProfiles();
+                closeModals();
+            } catch (e) {
+                alert('❌ Save failed: ' + e.message);
+            }
+        }
+
+        async function deleteProfile() {
+            const currentId = document.getElementById('profile-select').value;
+            if (currentId === 'new') return;
+
+            if (!confirm('Are you sure you want to delete this profile? Both data file and API key file will be removed.')) return;
+
+            try {
+                const res = await api.delete_profile(currentId);
+                if (res.status === 'deleted') {
+                    alert('✅ Profile deleted.');
+                    await loadProfiles();
+                    loadProfileForm('new');
+                } else {
+                    alert('❌ Deletion failed');
+                }
+            } catch (e) {
+                alert('❌ Error: ' + e.message);
+            }
+        }
+
+        function handleKey(e) { if (e.key === 'Enter') sendMsg(); }
+
+        async function loadServerList() {
+            try {
+                const res = await api.get_server_config_list();
+                servers = res; // Update global variable
+                const select = document.getElementById('srv-select');
+                select.innerHTML = '<option value="new">+ Create New Server</option>';
+
+                Object.keys(servers).forEach(name => {
+                    const opt = document.createElement('option');
+                    opt.value = name;
+                    opt.text = name;
+                    select.appendChild(opt);
+                });
+
+                if (Object.keys(servers).length > 0) {
+                    const firstName = Object.keys(servers)[0];
+                    select.value = firstName;
+                    selectServer(firstName);
+                } else {
+                    select.value = 'new';
+                    selectServer('new');
+                }
+            } catch (e) {
+                console.error('Failed to load server list:', e);
+            }
+        }
+
+        async function testServer() {
+            const name = document.getElementById('srv-name').value;
+            if (!name) return alert('Server Name (ID) is required');
+
+            const area = document.getElementById('server-tools-area');
+            const list = document.getElementById('server-tools-list');
+            area.style.display = 'block';
+            list.innerHTML = '';
+
+            let attempts = 0;
+            const maxAttempts = 10;
+
+            const checkStatus = async () => {
+                attempts++;
+                list.innerHTML = `<div style="color:#f59e0b;">⏳ Testing connection... (${attempts}/${maxAttempts})</div>`;
+
+                try {
+                    const trans = document.querySelector('input[name="transport"]:checked').value;
+                    const cmd = document.getElementById('srv-cmd').value;
+                    const args = document.getElementById('srv-args').value;
+                    const url = document.getElementById('srv-url').value;
+                    const headers = document.getElementById('srv-headers').value;
+
+                    // Pass all transport info to bridge
+                    const res = await api.test_connection(cmd, args, trans, url, headers);
+
+                    if (res.ok) {
+                        const statusColor = res.status === 'connected' ? '#4ade80' : '#f59e0b';
+                        list.innerHTML = `<div style="color:${statusColor}; margin-bottom:5px;">✅ Connected (Status: ${res.status})</div>`;
+
+                        if (res.tools && res.tools.length > 0) {
+                            res.tools.forEach(t => {
+                                const d = document.createElement('div');
+                                d.style.marginBottom = '4px';
+                                d.innerHTML = `<b style="color:#e2e8f0;">${t.name}</b>: <span style="color:#94a3b8;">${t.description}</span>`;
+                                list.appendChild(d);
+                            });
+                        } else {
+                            list.innerHTML += '<div style="color:#94a3b8;">No tools available yet or empty.</div>';
+                        }
+                        return;
+                    } else {
+                        list.innerHTML = `<div style="color:#f87171; font-weight:bold;">❌ Connection Failed</div>`;
+                        if (res.error) list.innerHTML += `<div style="color:#fca5a5;">${res.error}</div>`;
+                        if (res.message) list.innerHTML += `<div style="color:#cbd5e1;">${res.message}</div>`;
+                    }
+                } catch (e) {
+                    list.innerHTML = `<div style="color:#f87171;">❌ System Error: ${e.message}</div>`;
+                }
+            };
+            checkStatus();
+        }
+
+        // [New UI Logic for Transport Selection]
+        function toggleTransport(type) {
+            const stdioArea = document.getElementById('trans-stdio-area');
+            const netArea = document.getElementById('trans-net-area');
+
+            if (stdioArea) stdioArea.style.display = (type === 'stdio') ? 'block' : 'none';
+            if (netArea) netArea.style.display = (type === 'http' || type === 'sse') ? 'block' : 'none';
+        }
+
+        async function selectServer(name) {
+            try {
+                const delBtn = document.getElementById('btn-delete-server');
+                const area = document.getElementById('server-tools-area');
+                const list = document.getElementById('server-tools-list');
+
+                if (name === 'new') {
+                    document.getElementById('srv-name').value = '';
+                    // Reset to default
+                    const stdioRadio = document.querySelector('input[name="transport"][value="stdio"]');
+                    if (stdioRadio) stdioRadio.checked = true;
+                    toggleTransport('stdio');
+
+                    document.getElementById('srv-cmd').value = 'python';
+                    document.getElementById('srv-args').value = '';
+                    document.getElementById('srv-url').value = '';
+                    document.getElementById('srv-headers').value = '';
+
+                    if (delBtn) delBtn.style.display = 'none';
+                    area.style.display = 'none';
+                    list.innerHTML = '';
+                    return;
+                }
+
+                const server = servers[name];
+                if (server) {
+                    document.getElementById('srv-name').value = name;
+
+                    // Transport Setting
+                    const trans = server.transport || 'stdio';
+                    const rad = document.querySelector(`input[name="transport"][value="${trans}"]`);
+                    if (rad) {
+                        rad.checked = true;
+                        toggleTransport(trans);
+                    } else {
+                        // If invalid, default to stdio
+                        const stdioRadio = document.querySelector('input[name="transport"][value="stdio"]');
+                        if (stdioRadio) stdioRadio.checked = true;
+                        toggleTransport('stdio');
+                    }
+
+                    document.getElementById('srv-cmd').value = server.command || '';
+                    document.getElementById('srv-args').value = (server.args || []).join('\n');
+                    document.getElementById('srv-url').value = server.url || '';
+
+                    // Convert headers dict to string (Key=Value)
+                    let hStr = "";
+                    if (server.headers) {
+                        hStr = Object.entries(server.headers).map(([k, v]) => `${k}=${v}`).join('\n');
+                    }
+                    document.getElementById('srv-headers').value = hStr;
+
+                    if (delBtn) delBtn.style.display = 'block';
+
+                    area.style.display = 'none';
+                    list.innerHTML = '';
+                }
+            } catch (e) {
+                console.error('Failed to select server:', e);
+            }
+        }
+
+        async function deleteServer() {
+            const name = document.getElementById('srv-name').value;
+            if (!name) return;
+            if (!confirm(`Are you sure you want to delete server '${name}' settings?`)) return;
+
+            try {
+                const res = await api.delete_server(name);
+                if (res.status === 'deleted') {
+                    alert('✅ Server settings deleted.');
+                    await loadServerList();
+                } else {
+                    alert('❌ Deletion failed');
+                }
+            } catch (e) {
+                alert('❌ Error: ' + e.message);
+            }
+        }
+
+
+        async function copyToClipboard(event, text) {
+            event.stopPropagation();
+            try {
+                // Consider fallback for environments where navigator.clipboard doesn't work (some pywebview versions)
+                const textArea = document.createElement("textarea");
+                textArea.value = text;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+
+                const btn = event.target;
+                const originalText = btn.textContent;
+                btn.textContent = '✅ Copied!';
+                btn.style.borderColor = '#10b981';
+                setTimeout(() => {
+                    btn.textContent = originalText;
+                    btn.style.borderColor = '';
+                }, 2000);
+            } catch (err) {
+                console.error('Copy failed', err);
+            }
+        }
+
+        async function onToggleTool(event, serverName, toolName) {
+            event.stopPropagation();
+            const enabled = event.target.checked;
+            const item = event.target.closest('.tool-accordion-item') || event.target.closest('.list-item');
+
+            try {
+                const res = await api.toggle_tool(serverName, toolName, enabled);
+                if (res.status === 'ok') {
+                    if (item) {
+                        if (enabled) {
+                            item.classList.remove('disabled');
+                        } else {
+                            item.classList.add('disabled');
+                        }
+                    }
+
+                    // Global tool list update (optional)
+                    // Calling loadTools() might re-render the sidebar and lose checkbox states,
+                    // so decide carefully based on logic. Here, only visual effect is applied instead of full refresh.
+                } else {
+                    alert('Failed: ' + res.message);
+                    event.target.checked = !enabled; // Revert
+                }
+            } catch (e) {
+                alert('Error: ' + e.message);
+                event.target.checked = !enabled; // Revert
+            }
+        }
+
+        async function saveServer() {
+            const name = document.getElementById('srv-name').value;
+            const trans = document.querySelector('input[name="transport"]:checked').value;
+
+            // Validation
+            if (!name) { alert('Server Name (ID) is required.'); return; }
+
+            let cmd = '';
+            let args = '';
+            let url = '';
+            let headers = '';
+
+            if (trans === 'stdio') {
+                cmd = document.getElementById('srv-cmd').value;
+                args = document.getElementById('srv-args').value;
+                if (!cmd) { alert('Command is required for Stdio transport.'); return; }
+            } else { // http or sse
+                url = document.getElementById('srv-url').value;
+                headers = document.getElementById('srv-headers').value;
+                if (!url) { alert('URL is required for HTTP/SSE transport.'); return; }
+            }
+
+            try {
+                // Call extended API with transport info
+                await api.save_server_config(name, cmd, args, trans, url, headers);
+                alert('✅ Server settings saved!');
+                await loadServerList();
+                // Reselect to refresh UI
+                document.getElementById('srv-select').value = name;
+            } catch (e) {
+                alert('❌ Save failed: ' + e.message);
+            }
+        }
+
+        // [UI Improvement] Accordion toggle function
+        function toggleSection(header, targetId) {
+            const target = document.getElementById(targetId);
+            if (target) {
+                target.classList.toggle('collapsed');
+                header.classList.toggle('collapsed');
+            }
+        }
+
+        // [UI Improvement] Log display toggle function
+        function toggleLogs() {
+            const checked = document.getElementById('log-mode-check').checked;
+            if (checked) {
+                document.body.classList.remove('hide-logs');
+            } else {
+                document.body.classList.add('hide-logs');
+            }
+        }
+
+        // [UI Improvement] Sidebar toggle function
+        function toggleSidebar() {
+            const sidebar = document.querySelector('.sidebar');
+            sidebar.classList.toggle('collapsed');
+        }
+
+        // [UI Improvement] IME status polling
+        async function pollImeStatus() {
+            try {
+                // Check only when window has focus (reduce load)
+                if (document.hasFocus()) {
+                    const res = await api.get_ime_mode();
+                    const el = document.getElementById('ime-indicator');
+                    if (el) {
+                        if (res.mode === 'KOR') {
+                            el.textContent = 'Kor';
+                            el.style.color = '#34d399'; // Greenish
+                            el.style.borderColor = '#34d399';
+                        } else {
+                            el.textContent = 'Eng';
+                            el.style.color = '#94a3b8'; // Gray
+                            el.style.borderColor = 'transparent';
+                        }
+                    }
+                }
+            } catch (e) {
+                // Ignore errors
+            }
+
+            setTimeout(pollImeStatus, 1000);
+        }
+
+        // Initial execution
+        pollImeStatus();
+
+        async function loadSystemSettings() {
+            const container = document.getElementById('settings-system-container');
+            if (container && container.children.length === 0) {
+                const template = await api.get_settings_template();
+                container.innerHTML = template;
+            }
+
+            const config = await api.get_engine_config();
+            if (document.getElementById('sys-max-iter')) {
+                document.getElementById('sys-max-iter').value = config.max_iterations;
+                document.getElementById('sys-ctx-limit').value = config.context_limit;
+                document.getElementById('sys-data-limit').value = config.data_max_length;
+                document.getElementById('sys-trim-strategy').value = config.trim_strategy;
+                document.getElementById('sys-version-display').textContent = 'v' + config.version;
+            }
+        }
+
+
+
+        async function saveEngineConfig() {
+            // Check if element exists to avoid error
+            const verElem = document.getElementById('sys-version-display');
+            if (!verElem) return; // Should not happen if loaded correctly
+
+            const config = {
+                version: verElem.textContent.replace('v', ''),
+                max_iterations: parseInt(document.getElementById('sys-max-iter').value) || 30,
+                context_limit: parseInt(document.getElementById('sys-ctx-limit').value) || 100000,
+                data_max_length: parseInt(document.getElementById('sys-data-limit').value) || 100000,
+                trim_strategy: document.getElementById('sys-trim-strategy').value,
+                description: "AI Engine Configuration - Controls physical limits of the AI reasoning process"
+            };
+
+            const status = document.getElementById('sys-save-status');
+            if (status) {
+                status.textContent = 'Saving...';
+                status.style.color = '#f59e0b';
+            }
+
+            try {
+                const res = await api.save_engine_config(config);
+                if (status) {
+                    if (res.status === 'saved') {
+                        status.textContent = '✅ Saved!';
+                        status.style.color = '#10b981';
+                        setTimeout(() => status.textContent = '', 3000);
+                    } else {
+                        status.textContent = '❌ Failed';
+                        status.style.color = '#ef4444';
+                    }
+                }
+            } catch (e) {
+                if (status) {
+                    status.textContent = '❌ Error';
+                    status.style.color = '#ef4444';
+                }
+            }
+        }
+
+        async function loadPersonas() {
+            const res = await api.get_personas();
+            const sel = document.getElementById('header-persona-select');
+            sel.innerHTML = '<option value="">Select Persona</option>';
+            res.personas.forEach(p => {
+                const opt = document.createElement('option');
+                opt.value = p.id;
+                opt.textContent = p.name;
+                if (p.id === res.active_id) opt.selected = true;
+                sel.appendChild(opt);
+            });
+        }
+
+        async function onSwitchPersona(id) {
+            if (!id) return;
+            await api.switch_persona(id);
+            if (confirm('Persona changed. Do you want to start a new chat with the new persona?')) {
+                startNewChat();
+            }
+        }
+        async function loadPackSettings() {
+            const manSelect = document.getElementById('sys-pack-manifest-select');
+            const dirSelect = document.getElementById('sys-pack-dir-select');
+
+            manSelect.disabled = true;
+            dirSelect.disabled = true;
+
+            try {
+                const activePackDir = await api.get_active_pack();
+
+                // 1. Load Formal Manifests (L2)
+                try {
+                    const resMan = await api.get_pack_manifests();
+                    manSelect.innerHTML = '<option value="">-- Select Standard Pack --</option>';
+                    if (resMan.status === 'ok' && Array.isArray(resMan.packs)) {
+                        resMan.packs.forEach(p => {
+                            // [User Request] Show 'pack_dir' (Directory Name) in the dropdown
+                            const opt = document.createElement('option');
+                            opt.value = p.dir;
+                            opt.text = p.dir; // Was: `${p.name} (v${p.version || '?'})`
+                            if (p.dir === activePackDir) opt.selected = true;
+                            manSelect.appendChild(opt);
+                        });
+                    }
+                } catch (e) { console.error("Manifest load error:", e); }
+
+                // 2. Load Raw Directories (L1)
+                try {
+                    const resDir = await api.get_available_packs(); // Returns list of strings
+                    dirSelect.innerHTML = '<option value="">-- All Directories --</option>';
+                    if (Array.isArray(resDir)) {
+                        resDir.forEach(d => {
+                            const opt = document.createElement('option');
+                            opt.value = d;
+                            opt.text = d;
+                            if (d === activePackDir) opt.selected = true;
+                            dirSelect.appendChild(opt);
+                        });
+                    }
+                } catch (e) { console.error("Dir load error:", e); }
+
+                manSelect.disabled = false;
+                dirSelect.disabled = false;
+
+                // 3. Load Info for Active Pack
+                if (activePackDir) {
+                    loadPackInfo(activePackDir);
+                }
+
+            } catch (e) {
+                console.error("Failed to load packs:", e);
+            }
+        }
+
+        // [Unified Logic] Toggle Pack
+        async function handlePackSelection(packName) {
+            if (!packName) return;
+
+            // 1. Switch Path (L1) - Immediate
+            try {
+                const res = await api.switch_pack(packName);
+                if (res.status !== 'ok') {
+                    console.error("Pack switch failed:", res.message);
+                }
+            } catch (e) {
+                console.error("Pack switch error:", e);
+            }
+
+            // 2. Show Info (L2) - Visual Only
+            loadPackInfo(packName);
+
+            // 3. Refresh Dropdowns (Let them update naturally based on active pack)
+            await loadPackSettings();
+        }
+
+        // [Decoupled Logic] Step 2: Activate Engine
+        async function activateSelectedPack() {
+            const select = document.getElementById('sys-pack-select');
+            const packName = select.value;
+            const btn = document.getElementById('btn-activate-pack');
+
+            if (!confirm(`Switch to IQ-Pack '${packName}'? This will reload the AI engine.`)) return;
+
+            btn.disabled = true;
+            btn.innerText = 'Connecting...';
+            select.disabled = true;
+
+            try {
+                const res = await api.switch_pack(packName);
+                if (res.status === 'ok') {
+                    // Success -> In-place Refresh (Settings Panel Only)
+                    // Just update the visual state of the pack list
+                    await loadPackSettings();
+
+                    alert(`✅ Switched to ${packName}`);
+
+                    // Button visual update
+                    btn.innerText = '✅ Active';
+                    btn.disabled = true;
+                    btn.style.background = '#64748b';
+
+                } else {
+                    alert('❌ Failed: ' + res.message);
+                    btn.disabled = false;
+                    btn.innerText = '🔌 Connect';
+                    select.disabled = false;
+                }
+            } catch (e) {
+                alert('❌ Error: ' + e.message);
+                btn.disabled = false;
+                btn.innerText = '🔌 Connect';
+                select.disabled = false;
+            }
+        }
+
+        // [Helper] Load L2 Intro Info (Visual Only)
+        async function loadPackInfo(packName) {
+            const infoBox = document.getElementById('pack-info-display');
+
+            try {
+                const res = await api.get_pack_intro(packName);
+
+                if (res && res.status === 'ok' && res.data) {
+                    infoBox.style.display = 'block';
+                    // [User Request] Show RAW JSON without filtering
+                    const jsonStr = JSON.stringify(res.data, null, 4);
+
+                    infoBox.innerHTML = `
+                        <div style="background:rgba(15, 23, 42, 0.6); border:1px solid #334155; border-radius:6px; padding:10px; margin-top:10px;">
+                            <div style="font-size:12px; color:#60a5fa; margin-bottom:5px; font-weight:600;">📄 intro.json Content:</div>
+                            <pre style="font-family: 'Consolas', monospace; font-size: 11px; color: #cbd5e1; white-space: pre-wrap; word-break: break-all; margin:0;">${jsonStr}</pre>
+                        </div>
+                    `;
+
+                } else {
+                    infoBox.style.display = 'block';
+                    infoBox.innerHTML = `
+                        <div style="padding:10px; color:#94a3b8; font-size:12px; font-style:italic;">
+                            No standard introduction (intro.json) found for ${packName}.
+                        </div>
+                    `;
+                }
+            } catch (e) {
+                console.error("Error loading pack info:", e);
+                infoBox.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+
+</html>

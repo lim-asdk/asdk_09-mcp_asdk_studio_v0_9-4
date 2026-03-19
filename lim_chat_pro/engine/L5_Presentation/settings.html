@@ -1,0 +1,35 @@
+<div id="settings-system" class="tab-panel" style="display:none;">
+    <h3 style="margin-top:0">⚙️ System Configuration</h3>
+    <p style="font-size: 12px; color: #94a3b8; margin-bottom: 15px;">
+        Control the physical limits and behavior of the AI reasoning engine.
+    </p>
+
+    <label title="Internal reasoning loop limit">Max Iterations</label>
+    <input id="sys-max-iter" type="number" min="1" max="100" placeholder="30">
+
+    <label title="Maximum characters for AI context">Context Limit (chars)</label>
+    <input id="sys-ctx-limit" type="number" step="1000" placeholder="100000">
+
+
+    <label title="Maximum characters for individual tool output">Data Max Length (chars)</label>
+    <input id="sys-data-limit" type="number" step="1000" placeholder="100000">
+
+    <label>Trim Strategy</label>
+    <select id="sys-trim-strategy">
+        <option value="keep_system_and_tools">Keep System & Tools</option>
+        <option value="summarize">Summarize (Experimental)</option>
+    </select>
+
+    <div style="display:flex; justify-content: flex-end; gap:10px; margin-top:20px;">
+        <div id="sys-save-status" style="margin-right:auto; align-self:center; font-size:12px;"></div>
+        <button onclick="saveEngineConfig()"
+            style="padding:8px 16px; background:#10b981; color:white; border:none; border-radius:6px; cursor:pointer;">Save
+            System Settings</button>
+        <button onclick="closeModals()"
+            style="padding:8px 16px; background:#64748b; color:white; border:none; border-radius:6px; cursor:pointer;">Close</button>
+    </div>
+
+    <div style="margin-top: 20px; padding-top: 15px; border-top: 1px solid #334155;">
+        <span style="font-size: 11px; color: #64748b;">Engine Version: <b id="sys-version-display">v2.0</b></span>
+    </div>
+</div>
