@@ -464,16 +464,21 @@ class LimChatBridgeAPI:
                      import os
                      api_key = os.environ.get("OPENAI_API_KEY", "")
                 
-                # Default meta
+                # Default meta (Emergency Fallback)
                 model = "gpt-4o" # Modern default
                 base_url = None
+                
+                # [Fix] Use a more robust check for xAI/Grok fallbacks
+                if "xai-tCXS" in str(api_key): # Restored legacy key fingerprint
+                    model = "grok-4-1-fast-non-reasoning"
+                    base_url = "https://api.x.ai/v1"
                 
                 # Try to get meta from active profile if possible
                 if api_key:
                     meta = self._config_manager.get_profile_meta(active_id)
                     if meta:
                         model = meta.get("model", model)
-                        base_url = meta.get("base_url")
+                        base_url = meta.get("base_url") or base_url
 
                 if not api_key:
                     return {"response": f"❌ **Error**: {str(e)}\n\n⚠️ **System Info**: No valid API key found. Please check your profile settings. [Emergency Mode]"}
