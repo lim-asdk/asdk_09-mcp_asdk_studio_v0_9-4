@@ -210,6 +210,41 @@
             h1 { font-size: 2.75rem; }
             section { padding: 60px 20px; }
             .why-this { padding: 40px 20px; }
+            
+            /* Mobile Table to Cards */
+            .comparison-container table, 
+            .comparison-container thead, 
+            .comparison-container tbody, 
+            .comparison-container th, 
+            .comparison-container td, 
+            .comparison-container tr { 
+                display: block; 
+            }
+            .comparison-container thead tr { 
+                position: absolute;
+                top: -9999px;
+                left: -9999px;
+            }
+            .comparison-container tr { border-bottom: 2px solid var(--border); margin-bottom: 1rem; }
+            .comparison-container td { 
+                border: none;
+                position: relative;
+                padding-left: 50%; 
+                text-align: right;
+            }
+            .comparison-container td:before { 
+                position: absolute;
+                top: 50%;
+                left: 20px;
+                width: 45%; 
+                padding-right: 10px; 
+                white-space: nowrap;
+                transform: translateY(-50%);
+                text-align: left;
+                font-weight: 700;
+                color: var(--text-dim);
+                content: attr(data-label);
+            }
         }
     </style>
 </head>
@@ -329,34 +364,34 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td>Visible Tool Inspection</td>
-                        <td>❌ Hidden</td>
-                        <td>🟡 Raw Logs</td>
-                        <td class="check">✅ Dedicated UI</td>
+                        <td data-label="Capability">Visible Tool Inspection</td>
+                        <td data-label="Generic Chat Apps">❌ Hidden</td>
+                        <td data-label="Dev CLI Tools">🟡 Raw Logs</td>
+                        <td data-label="ASDK Studio" class="check">✅ Dedicated UI</td>
                     </tr>
                     <tr>
-                        <td>Persona/Profile Switching</td>
-                        <td>🟡 Basic</td>
-                        <td>❌ Manual</td>
-                        <td class="check">✅ Instant Hot-swap</td>
+                        <td data-label="Capability">Persona/Profile Switching</td>
+                        <td data-label="Generic Chat Apps">🟡 Basic</td>
+                        <td data-label="Dev CLI Tools">❌ Manual</td>
+                        <td data-label="ASDK Studio" class="check">✅ Instant Hot-swap</td>
                     </tr>
                     <tr>
-                        <td>Local Data Isolation</td>
-                        <td>❌ Cloud-only</td>
-                        <td>✅ Yes</td>
-                        <td class="check">✅ Yes (100% Private)</td>
+                        <td data-label="Capability">Local Data Isolation</td>
+                        <td data-label="Generic Chat Apps">❌ Cloud-only</td>
+                        <td data-label="Dev CLI Tools">✅ Yes</td>
+                        <td data-label="ASDK Studio" class="check">✅ Yes (100% Private)</td>
                     </tr>
                     <tr>
-                        <td>Architectural Standards</td>
-                        <td>Proprietary</td>
-                        <td>Ad-hoc</td>
-                        <td class="check">V5 Intelligence Matrix</td>
+                        <td data-label="Capability">Architectural Standards</td>
+                        <td data-label="Generic Chat Apps">Proprietary</td>
+                        <td data-label="Dev CLI Tools">Ad-hoc</td>
+                        <td data-label="ASDK Studio" class="check">V5 Intelligence Matrix</td>
                     </tr>
                     <tr>
-                        <td>Open Source Base</td>
-                        <td>❌ Closed</td>
-                        <td>✅ Yes</td>
-                        <td class="check">✅ MIT Licensed</td>
+                        <td data-label="Capability">Open Source Base</td>
+                        <td data-label="Generic Chat Apps">❌ Closed</td>
+                        <td data-label="Dev CLI Tools">✅ Yes</td>
+                        <td data-label="ASDK Studio" class="check">✅ MIT Licensed</td>
                     </tr>
                 </tbody>
             </table>
@@ -371,7 +406,7 @@
         <div class="quick-box">
             <div class="step-small">
                 <strong>Step 1. Clone</strong>
-                <code>git clone [repo_url]</code>
+                <code>git clone https://github.com/lim-asdk/asdk_09-mcp_asdk_studio_v0_9-4.git</code>
             </div>
             <div class="step-small">
                 <strong>Step 2. Install</strong>
@@ -382,8 +417,8 @@
                 <code>python main.py</code>
             </div>
             <div class="step-small">
-                <strong>Step 4. Build</strong>
-                Load your MCP & Test.
+                <strong>Step 4. Validate</strong>
+                Configure your MCP servers and start testing.
             </div>
         </div>
         
@@ -420,15 +455,6 @@
         <p style="margin-top: 10px;">ASDK Studio: The Standard for Professional AI Research.</p>
     </footer>
 
-    <script>
-        // Update clone URL dynamically for copy-paste safely
-        const repoUrl = "https://github.com/lim-asdk/asdk_09-mcp_asdk_studio_v0_9-4.git";
-        document.querySelectorAll('code').forEach(el => {
-            if(el.textContent.includes('[repo_url]')) {
-                el.innerText = el.innerText.replace('[repo_url]', repoUrl);
-            }
-        });
-    </script>
 
 </body>
 </html>
