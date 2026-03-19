@@ -24,8 +24,8 @@ class PathManager:
     # 1. 기준점 잡기 (Project Root Calculation)
     # 위치: lim_chat_pro/engine/L1_Infrastructure/path_manager.py
     _FILE_PATH = Path(__file__).resolve()
-    SRC_ROOT = _FILE_PATH.parent.parent.parent # engine/
-    PROJECT_ROOT = SRC_ROOT.parent             # 프로젝트 루트 (mcp_asdk_studio_v1/)
+    SRC_ROOT = _FILE_PATH.parent.parent          # engine/
+    PROJECT_ROOT = SRC_ROOT.parent.parent        # 프로젝트 루트 (mcp_asdk_studio_v1/)
     
     # 2. 주요 장소 정의
     IQ_PACKS_DIR = PROJECT_ROOT / "packs"       
