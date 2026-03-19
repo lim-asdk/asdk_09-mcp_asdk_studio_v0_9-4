@@ -28,7 +28,7 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s [%(levelname)s] %(na
 logger = logging.getLogger("ASDK.Studio.Launcher")
 
 def main():
-    logger.info("Initializing MCP ASDK Studio v1.0...")
+    logger.info("Initializing MCP ASDK Studio v0.9-4...")
 
     display_mode = "Studio Mode"
 

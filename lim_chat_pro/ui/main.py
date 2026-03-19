@@ -66,7 +66,7 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s [%(levelname)s] %(na
 logger = logging.getLogger("LimChat.Pro.Launcher")
 
 def main():
-    logger.info("Initializing Lim Chat Pro v1.0...")
+    logger.info("Initializing ASDK Studio Engine v0.9-4...")
 
     # ----------------------------------------------------------------
     # 단계 1: 지능 팩(IQ-Pack) 선택

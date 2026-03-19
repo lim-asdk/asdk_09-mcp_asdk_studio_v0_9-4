@@ -1,7 +1,7 @@
 # Product Overview (English)
 
-## 💎 What is MCP ASDK Studio v1?
-**MCP ASDK Studio v1** is a desktop-first AI workspace designed for developers, researchers, and professional AI users. It provides a standardized interface to interact with multiple AI models and Model Context Protocol (MCP) servers seamlessly.
+## 💎 What is MCP ASDK Studio v0.9-4?
+**MCP ASDK Studio v0.9-4** is a desktop-first AI workspace designed for developers, researchers, and professional AI users. It provides a standardized interface to interact with multiple AI models and Model Context Protocol (MCP) servers seamlessly.
 
 ## 🚀 Vision
 The primary goal of this studio is to move away from specialized "IQ-Packs" to a general-purpose environment where users can build their own vertical AI workflows using the robust, layered architecture originally developed for `Lim Chat PRO`.
