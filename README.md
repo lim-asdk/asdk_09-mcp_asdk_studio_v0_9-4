@@ -1,3 +1,7 @@
+# MCP ASDK Studio v0.9-4 (Public Beta) 🚀
+
+> **"Your High-Performance, Free Alternative to Commercial AI Desktops"**
+
 ![MCP ASDK Studio Chat](docs/assets/screenshot.png)
 ![MCP Server Setup](docs/assets/mcp_setup.png)
 *Professional Setup Interface: Connect local scripts or remote SSE servers with ease.*
