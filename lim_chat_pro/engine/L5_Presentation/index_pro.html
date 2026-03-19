@@ -1469,8 +1469,42 @@
             if (tab === 'packs') loadPackSettings();
         }
 
-        function loadProfileForm(id) {
+        async function loadModels() {
+            try {
+                const res = await api.get_models();
+                const select = document.getElementById('p-model');
+                
+                // Keep the default option and custom option
+                const defaultOpt = select.querySelector('option[value=""]');
+                const customGroup = select.querySelector('optgroup[label="Custom"]');
+                
+                select.innerHTML = '';
+                if (defaultOpt) select.appendChild(defaultOpt);
+                
+                if (res && res.models) {
+                    const group = document.createElement('optgroup');
+                    group.label = "Available Models (Server Sync)";
+                    res.models.forEach(m => {
+                        const opt = document.createElement('option');
+                        opt.value = m.id;
+                        opt.textContent = m.name;
+                        group.appendChild(opt);
+                    });
+                    select.appendChild(group);
+                }
+                
+                if (customGroup) select.appendChild(customGroup);
+            } catch (e) {
+                console.error("Failed to load models:", e);
+            }
+        }
+
+        async function loadProfileForm(id) {
             const deleteBtn = document.getElementById('btn-delete');
+            
+            // [Fix] Ensure models are loaded before setting values
+            await loadModels();
+
             if (id === 'new') {
                 document.getElementById('p-name').value = '';
                 document.getElementById('p-model').value = '';
