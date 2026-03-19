@@ -20,7 +20,7 @@ MCP ASDK Studio v1 is a general-purpose AI development and execution environment
 - **Safe Data Handling**: All sensitive keys and local configs are isolated in `user_data/` (Git excluded).
 
 ## 🛠️ Quick Start
-1. **Clone**: `git clone https://github.com/lim-asdk/mcp_asdk_studio_v1.git`
+1. **Clone**: `git clone https://github.com/lim-asdk/asdk_09-mcp_asdk_studio_v0_9-4.git`
 2. **Setup**: Create your profile in `user_data/profiles/default.json`.
 3. **Launch**: Run `python main.py` to start the desktop studio.
 
