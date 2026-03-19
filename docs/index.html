@@ -3,124 +3,301 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MCP ASDK Studio v1 | Desktop-First AI Workspace</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <title>MCP ASDK Studio v0.9-4 | Professional AI Workspace</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg: #0f172a;
+            --bg: #0b0f1a;
+            --card-bg: #161b2a;
             --accent: #3b82f6;
-            --accent-glow: #8b5cf6;
-            --text: #f8fafc;
+            --accent-glow: rgba(59, 130, 246, 0.5);
+            --text-main: #f8fafc;
+            --text-dim: #94a3b8;
+            --border: rgba(255, 255, 255, 0.1);
         }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            margin: 0;
             font-family: 'Inter', sans-serif;
-            background: var(--bg);
-            color: var(--text);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            text-align: center;
+            background-color: var(--bg);
+            color: var(--text-main);
+            line-height: 1.6;
             overflow-x: hidden;
         }
-        .container {
-            max-width: 900px;
-            padding: 40px;
-            z-index: 10;
+
+        /* Hero Section */
+        .hero {
+            padding: 120px 20px 60px;
+            text-align: center;
+            position: relative;
         }
-        .badge {
-            background: rgba(59, 130, 246, 0.1);
-            color: var(--accent);
-            padding: 6px 12px;
-            border-radius: 999px;
-            font-size: 14px;
-            font-weight: 600;
-            border: 1px solid rgba(59, 130, 246, 0.3);
-            margin-bottom: 24px;
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -100px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+            z-index: -1;
+            opacity: 0.3;
+        }
+
+        .version-tag {
             display: inline-block;
+            padding: 4px 12px;
+            background: rgba(59, 130, 246, 0.15);
+            color: var(--accent);
+            border-radius: 99rem;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            border: 1px solid var(--accent);
         }
+
         h1 {
-            font-size: 64px;
+            font-size: 4rem;
             font-weight: 800;
-            margin: 0 0 20px 0;
-            background: linear-gradient(135deg, #fff 0%, #94a3b8 100%);
+            letter-spacing: -0.02em;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(to bottom, #fff, #94a3b8);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
-        p {
-            font-size: 20px;
-            color: #94a3b8;
-            line-height: 1.6;
-            margin-bottom: 40px;
+
+        .hero p {
+            font-size: 1.25rem;
+            color: var(--text-dim);
+            max-width: 700px;
+            margin: 0 auto 2.5rem;
         }
+
         .cta-group {
             display: flex;
-            gap: 16px;
+            gap: 1rem;
             justify-content: center;
+            flex-wrap: wrap;
         }
+
         .btn {
-            padding: 14px 28px;
+            padding: 12px 32px;
             border-radius: 8px;
             font-weight: 600;
             text-decoration: none;
             transition: all 0.2s;
+            font-size: 1rem;
         }
         .btn-primary {
-            background: var(--accent);
+            background-color: var(--accent);
             color: white;
-            box-shadow: 0 0 20px rgba(59, 130, 246, 0.4);
+            box-shadow: 0 4px 14px 0 rgba(0, 118, 255, 0.39);
         }
         .btn-primary:hover {
             transform: translateY(-2px);
-            box-shadow: 0 0 30px rgba(59, 130, 246, 0.6);
+            box-shadow: 0 6px 20px rgba(0, 118, 255, 0.45);
         }
-        .btn-outline {
-            border: 1px solid #334155;
-            color: #f1f5f9;
+        .btn-secondary {
+            background-color: transparent;
+            border: 1px solid var(--border);
+            color: var(--text-main);
         }
-        .btn-outline:hover {
-            background: rgba(255, 255, 255, 0.05);
+        .btn-secondary:hover {
+            background-color: rgba(255, 255, 255, 0.05);
         }
-        .footer {
-            margin-top: 80px;
-            font-size: 14px;
-            color: #475569;
+
+        /* Features Section */
+        .features {
+            padding: 80px 20px;
+            max-width: 1100px;
+            margin: 0 auto;
         }
-        .glow {
-            position: absolute;
-            width: 600px;
-            height: 600px;
-            background: radial-gradient(circle, rgba(59, 130, 246, 0.15) 0%, transparent 70%);
-            top: -200px;
-            right: -200px;
-            z-index: 1;
+        .section-title {
+            text-align: center;
+            font-size: 2.25rem;
+            margin-bottom: 3.5rem;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+        .card {
+            background: var(--card-bg);
+            padding: 2rem;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            transition: border-color 0.2s;
+        }
+        .card:hover {
+            border-color: var(--accent);
+        }
+        .card h3 {
+            margin-bottom: 0.75rem;
+            font-size: 1.25rem;
+        }
+        .card p {
+            color: var(--text-dim);
+            font-size: 0.95rem;
+        }
+
+        /* Screenshots */
+        .showcase {
+            padding: 80px 20px;
+            background: rgba(255, 255, 255, 0.02);
+            text-align: center;
+        }
+        .screenshot-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            border: 1px solid var(--border);
+        }
+        .screenshot-container img {
+            width: 100%;
+            display: block;
+        }
+        .caption {
+            padding: 1rem;
+            background: #1e293b;
+            font-size: 0.85rem;
+            color: var(--text-dim);
+            text-align: left;
+        }
+
+        /* Getting Started */
+        .get-started {
+            padding: 80px 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .step {
+            display: flex;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+            align-items: flex-start;
+        }
+        .step-num {
+            background: var(--accent);
+            width: 32px;
+            height: 32px;
+            flex-shrink: 0;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+        }
+        code {
+            background: #000;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: monospace;
+            color: #fbbf24;
+        }
+
+        /* Footer */
+        footer {
+            padding: 60px 20px;
+            border-top: 1px solid var(--border);
+            text-align: center;
+            font-size: 0.9rem;
+            color: var(--text-dim);
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2.5rem; }
+            .hero { padding-top: 80px; }
         }
     </style>
 </head>
 <body>
-    <div class="glow"></div>
-    <div class="container">
-        <div class="badge">v0.9-4 (Public Beta)</div>
-        <h1>MCP ASDK Studio v0.9-4</h1>
+
+    <section class="hero">
+        <div class="version-tag">v0.9-4 Public Beta</div>
+        <h1>MCP ASDK Studio</h1>
         <p>
-            Experience the next generation of <strong>Desktop-First AI Workspaces</strong>.<br>
-            Configure AI providers, connect MCP servers, and build vertical agents with clinical precision.
+            The Ultimate 100% Free AI Development Workspace.<br>
+            A Professional-Grade Alternative to Commercial AI Desktop Apps.
         </p>
-        <div style="margin-bottom: 40px; border-radius: 12px; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 20px 50px rgba(0,0,0,0.5);">
-            <div style="padding: 10px; background: rgba(255,255,255,0.05); font-size: 12px; color: #64748b; text-align: left;">Main Chat Interface</div>
-            <img src="assets/screenshot.png" alt="ASDK Studio Chat" style="width: 100%; display: block;">
-            <div style="padding: 10px; background: rgba(255,255,255,0.05); font-size: 12px; color: #64748b; text-align: left; border-top: 1px solid rgba(255,255,255,0.1);">MCP Server Configuration</div>
-            <img src="assets/mcp_setup.png" alt="ASDK Studio Setup" style="width: 100%; display: block;">
-        </div>
         <div class="cta-group">
             <a href="https://github.com/lim-asdk/asdk_09-mcp_asdk_studio_v0_9-4" class="btn btn-primary">View on GitHub</a>
-            <a href="ko/PRODUCT_OVERVIEW.md" class="btn btn-outline">Documentation</a>
+            <a href="RELEASE_GUIDE_V5.md" class="btn btn-secondary">Release Guide</a>
+            <a href="ko/PRODUCT_OVERVIEW.md" class="btn btn-secondary">Korean Doc</a>
         </div>
-        <div class="footer">
-            &copy; 2026 lim_hwa_chan. All rights reserved.
+    </section>
+
+    <section class="features">
+        <h2 class="section-title">Core Capabilities</h2>
+        <div class="grid">
+            <div class="card">
+                <h3>Multi-AI Configuration</h3>
+                <p>Easily swap between Claude, GPT, and custom providers via standardized profiles.</p>
+            </div>
+            <div class="card">
+                <h3>Native MCP Support</h3>
+                <p>Connect and inspect MCP servers (local scripts or SSE) with a clinical setup interface.</p>
+            </div>
+            <div class="card">
+                <h3>V5 Architecture</h3>
+                <p>Robust L1-L4 vertical alignment ensuring stability and easy environment migration.</p>
+            </div>
+            <div class="card">
+                <h3>Vertical Agents</h3>
+                <p>Design and practice specialized agent workflows with persona-based logic.</p>
+            </div>
+            <div class="card">
+                <h3>Safety First</h3>
+                <p>100% Local data handling. Your API keys and history never leave your machine.</p>
+            </div>
+            <div class="card">
+                <h3>Open & Extensible</h3>
+                <p>Modify and expand the studio using AI. Built for the community by developers.</p>
+            </div>
         </div>
-    </div>
+    </section>
+
+    <section class="showcase">
+        <div class="screenshot-container">
+            <div class="caption">Main Chat Interface & Vertical Persona Selection</div>
+            <img src="assets/screenshot.png" alt="ASDK Studio UI">
+            <div class="caption" style="border-top: 1px solid var(--border)">MCP Server Setup & Tool Inspection</div>
+            <img src="assets/mcp_setup.png" alt="ASDK Studio Setup">
+        </div>
+    </section>
+
+    <section class="get-started">
+        <h2 class="section-title">Quick Start</h2>
+        <div class="step">
+            <div class="step-num">1</div>
+            <div>
+                <strong>Clone Repository</strong><br>
+                <code>git clone https://github.com/lim-asdk/asdk_09-mcp_asdk_studio_v0_9-4.git</code>
+            </div>
+        </div>
+        <div class="step">
+            <div class="step-num">2</div>
+            <div>
+                <strong>Install Dependencies</strong><br>
+                <code>pip install -r requirements.txt</code>
+            </div>
+        </div>
+        <div class="step">
+            <div class="step-num">3</div>
+            <div>
+                <strong>Configure & Launch</strong><br>
+                Set up <code>default.json</code> and run <code>python main.py</code>.<br>
+                <em>*This project is a desktop-first application, not a web app.</em>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2026 lim_hwa_chan. Project under MIT License.</p>
+        <p style="margin-top: 10px;">Built for the Global AI Community.</p>
+    </footer>
+
 </body>
 </html>
