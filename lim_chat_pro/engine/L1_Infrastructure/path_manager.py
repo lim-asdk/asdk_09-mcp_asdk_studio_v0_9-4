@@ -1,93 +1,103 @@
+# Project: lim_chat_v2_0
+# Developer: lim_hwa_chan
+# Version: 2.0 (Pro Interface Sync)
+
+"""
+[PATH_MANAGER.PY] - 프로그램 길라잡이 (내비게이션)
+-----------------------------------------------------------
+이 파일은 프로그램 내에서 파일들이 어디에 있는지 찾아주는 '내비게이션' 역할을 합니다.
+V2.0 규격으로 업데이트되어 지능 팩(IQ-Packs)과 사용자의 데이터를 완벽히 구분합니다.
+
+작성자: lim_hwa_chan (Updated for ASDK Studio v1)
+-----------------------------------------------------------
+"""
+
 from pathlib import Path
 import os
 import sys
 
 class PathManager:
     """
-    L1 Infrastructure: PathManager
-    
-    A singleton class responsible for dynamic path resolution and environment 
-    generalization for MCP ASDK Studio v0.9-4. It ensures that the application 
-    can run across different OS (Windows/Mac/Linux) by dynamically locating the 
-    project root and associated data folders.
-    
-    Note for AI Agents:
-    - ALWAYS use get_instance() to access paths.
-    - Do not hardcode absolute paths. Standardized via [V5-D-01].
+    중앙 집중식 경로 관리자 (V2.0 Production Standard)
     """
     
-    def __init__(self, project_root=None):
-        # 1. Determine Project Root
-        if project_root:
-            self.PROJECT_ROOT = Path(project_root).absolute()
-        else:
-            # Default: 4 levels up from this file
-            self.PROJECT_ROOT = Path(__file__).parent.parent.parent.parent.absolute()
+    # 1. 기준점 잡기 (Project Root Calculation)
+    # 위치: lim_chat_pro/engine/L1_Infrastructure/path_manager.py
+    _FILE_PATH = Path(__file__).resolve()
+    SRC_ROOT = _FILE_PATH.parent.parent.parent # engine/
+    PROJECT_ROOT = SRC_ROOT.parent             # 프로젝트 루트 (mcp_asdk_studio_v1/)
+    
+    # 2. 주요 장소 정의
+    IQ_PACKS_DIR = PROJECT_ROOT / "packs"       
+    USER_DATA_ROOT = PROJECT_ROOT / "user_data" 
+    
+    CONFIG_DIR = USER_DATA_ROOT / "configs"
+    HISTORY_DIR = USER_DATA_ROOT / "history"
+    
+    # 기본 경로 (Fallback)
+    DATA_ROOT = USER_DATA_ROOT
+    PROFILE_DIR = USER_DATA_ROOT / "profiles"
+    SERVER_DIR = USER_DATA_ROOT / "servers"
+    PROMPT_DIR = USER_DATA_ROOT / "prompts"
+    
+    # UI 경로
+    L5_UI_DIR = SRC_ROOT / "L5_Presentation"
+    
+    active_pack = None
+
+    @classmethod
+    def set_active_pack(cls, pack_name: str):
+        cls.active_pack = pack_name
         
-        # 2. Load .env
-        self.env = self._load_env()
+    @classmethod
+    def _resolve_path(cls, legacy_path: Path, pack_subdir: str):
+        if cls.active_pack:
+            pack_path = cls.IQ_PACKS_DIR / cls.active_pack / pack_subdir
+            pack_path.mkdir(parents=True, exist_ok=True)
+            return pack_path
+        return legacy_path
+
+    @classmethod
+    def get_config_file(cls, filename="config_pro.json"):
+        cls.CONFIG_DIR.mkdir(parents=True, exist_ok=True)
+        return cls.CONFIG_DIR / filename
         
-        # 3. Core Directory Pointers (Generalization)
-        # Allows overriding via .env for different environments
-        self.DATA_ROOT = Path(self.env.get("DATA_ROOT", self.PROJECT_ROOT / "user_data"))
-        self.KEYS_ROOT = Path(self.env.get("KEYS_ROOT", self.PROJECT_ROOT / "keys"))
-        self.LOG_ROOT = Path(self.env.get("LOG_ROOT", self.DATA_ROOT / "logs"))
+    @classmethod
+    def get_history_dir(cls):
+        cls.HISTORY_DIR.mkdir(parents=True, exist_ok=True)
+        return cls.HISTORY_DIR
         
-        # 4. Engine & UI Paths (L1..L5 Alignment)
-        self.ENGINE_ROOT = self.PROJECT_ROOT / "lim_chat_pro" / "engine"
-        self.UI_ROOT = self.ENGINE_ROOT / "L5_Presentation"
+    @classmethod
+    def get_profile_dir(cls):
+        return cls._resolve_path(cls.PROFILE_DIR, "profiles")
         
-        # 5. Logical Sub-dirs
-        self.CONFIG_DIR = self.DATA_ROOT / "configs"
-        self.HISTORY_DIR = self.DATA_ROOT / "history"
-        self.PROFILE_DIR = self.DATA_ROOT / "profiles"
-        self.PROMPT_DIR = self.DATA_ROOT / "prompts"
-        self.MCP_DATA_DIR = self.DATA_ROOT / "mcp"
+    @classmethod
+    def get_server_dir(cls):
+        cls.SERVER_DIR.mkdir(parents=True, exist_ok=True)
+        return cls.SERVER_DIR
         
-        self.SERVER_BUNDLE_DIR = self.PROJECT_ROOT / "servers"
+    @classmethod
+    def get_prompt_dir(cls):
+        return cls._resolve_path(cls.PROMPT_DIR, "prompts")
+    
+    @classmethod
+    def get_settings_file(cls):
+        if cls.active_pack:
+            return cls.IQ_PACKS_DIR / cls.active_pack / "settings.json"
+        return None
+    
+    @classmethod
+    def get_ui_path(cls, filename="index_pro.html"):
+        # index_pro.html이 없으면 index.html로 폴백
+        path = cls.L5_UI_DIR / filename
+        if not path.exists() and filename == "index_pro.html":
+            return cls.L5_UI_DIR / "index.html"
+        return path
 
-        # Initialize folders
-        self._ensure_essential_dirs()
-
-    def _load_env(self):
-        env = {}
-        env_path = self.PROJECT_ROOT / ".env"
-        if env_path.exists():
-            try:
-                with open(env_path, 'r', encoding='utf-8') as f:
-                    for line in f:
-                        line = line.strip()
-                        if line and not line.startswith('#') and '=' in line:
-                            name, value = line.split('=', 1)
-                            env[name.strip()] = value.strip()
-            except Exception:
-                pass
-        return env
-
-    def _ensure_essential_dirs(self):
-        dirs = [
-            self.DATA_ROOT, self.KEYS_ROOT, self.LOG_ROOT,
-            self.CONFIG_DIR, self.HISTORY_DIR, self.PROFILE_DIR, self.MCP_DATA_DIR
-        ]
-        for d in dirs:
-            d.mkdir(parents=True, exist_ok=True)
-
-    # --- Directory Getters ---
-    def get_profiles_dir(self): return self.PROFILE_DIR
-    def get_history_dir(self): return self.HISTORY_DIR
-    def get_configs_dir(self): return self.CONFIG_DIR
-    def get_keys_dir(self): return self.KEYS_ROOT
-    def get_logs_dir(self): return self.LOG_ROOT
-    def get_mcp_data_dir(self): return self.MCP_DATA_DIR
-
-    def get_mcp_config_path(self, filename="mcp_config.json"):
-        return self.MCP_DATA_DIR / filename
-
-    def get_ui_path(self, filename="index_pro.html"):
-        return self.UI_ROOT / filename
-
-    def add_engine_to_sys_path(self):
-        if str(self.ENGINE_ROOT) not in sys.path:
-            sys.path.insert(0, str(self.ENGINE_ROOT))
-        if str(self.PROJECT_ROOT) not in sys.path:
-            sys.path.insert(0, str(self.PROJECT_ROOT))
+    @classmethod
+    def add_engine_to_sys_path(cls):
+        """런처에서 사용하는 호환성 메서드"""
+        if str(cls.SRC_ROOT) not in sys.path:
+            sys.path.insert(0, str(cls.SRC_ROOT))
+        if str(cls.PROJECT_ROOT) not in sys.path:
+            sys.path.insert(0, str(cls.PROJECT_ROOT))
