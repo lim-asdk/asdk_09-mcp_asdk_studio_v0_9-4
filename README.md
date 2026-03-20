@@ -7,10 +7,10 @@
 ![MCP Server Setup](docs/assets/mcp_setup.png)
 *Professional Setup Interface: Connect local scripts, configure AI profiles, or remote SSE servers with ease.*
 
-## What Real Usage Looks Like
-MCP ASDK Studio is not just a concept UI.
+## Live Workspace Evidence
+MCP ASDK Studio provides a practical, desktop-first environment for AI tool orchestration.
 
-It connects to real MCP servers, exposes visible tool inventories, and generates structured outputs across multiple sources such as price, charts, filings, news, and summaries.
+It connects to live MCP servers, exposes visible tool inventories, and generates **fact-grounded outputs** from multiple sources including market data, SEC filings, and news summaries.
 
 Typical workflow:
 1. **Connect** MCP servers

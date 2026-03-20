@@ -21,21 +21,25 @@ ASDK Studio는 **5계층 아키텍처 (L1-L5)**를 따릅니다:
 
 ---
 
-## 🌟 **실제 실행 결과 예시**
-ASDK Studio는 단순한 컨셉 UI가 아닙니다. 실제 MCP 서버에 연결하여 사용 가능한 툴 목록을 노출하고, 질문 입력 후 시세, 차트, 공시, 뉴스, 요약 결과를 하나의 워크스페이스 안에서 누적·검토할 수 있습니다.
+---
 
-또한 각 tool 결과는 개별적으로 펼쳐 확인할 수 있으며, raw JSON 복사를 통해 검증 가능한 분석 흐름을 제공합니다.
+## 🌟 **지능형 실증 쇼케이스: AAPL(애플) 종합 분석**
+ASDK Studio는 실제 MCP 서버와 연동하여 작동하는 분석 워크플로우를 투명하게 공개합니다. 시세, 차트, 공시, 뉴스 데이터를 결합하여 **팩트 중심(Fact-grounded)**의 입체적인 통찰을 제공합니다.
+
+또한 각 tool 결과는 개별적으로 펼쳐 확인하고 raw JSON을 검증할 수 있어, AI 분석의 근거를 사용자가 직접 확인할 수 있습니다.
 
 ![실제 서버 연결](file:///C:/program_files/Lim%20Workspace/mcp_asdk_studio_v1/docs/assets/real-output-01-live-servers.png)
-**실제 연결된 서버 및 툴 목록이 UI에 투명하게 공개됨**
+**실제 연결된 서버 및 툴 목록: 사용 가능한 기능을 UI에서 직접 확인**
 
 ![분석 결과](file:///C:/program_files/Lim%20Workspace/mcp_asdk_studio_v1/docs/assets/real-output-02-analysis-flow.png)
-**다양한 MCP 툴 호출 결과가 누적형으로 제공되는 지능형 분석 화면**
+**다중 소스 교차 분석: 뉴스, 공시, 시세를 결합한 팩트 기반 요약 생성**
 
 ![Raw 데이터 검증](file:///C:/program_files/Lim%20Workspace/mcp_asdk_studio_v1/docs/assets/real-output-03-raw-results.png)
-**종합 의견과 함께 Raw 결과를 즉시 확인하고 검증 가능 (Copy JSON 지원)**
+**데이터 투명성: 종합 의견과 함께 반환된 Raw 결과를 즉시 확인 가능**
 
-> **"설명용 화면이 아니라, 실제로 작동 중인 분석 워크스페이스입니다."**
+> **"단순한 텍스트 답변이 아닌, 검증 가능한 데이터 기반의 분석 워크프페이스입니다."**
+
+---
 
 ---
 
