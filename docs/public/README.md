@@ -19,3 +19,4 @@ This repository is a developer-first AI + MCP workspace skeleton.
 
 - Screenshots should hide API keys, bearer tokens, and private paths.
 - `http` and `sse` servers do not need headers unless the target endpoint requires authentication.
+- When you click **Test Connection**, a healthy MCP server should show its tool list.

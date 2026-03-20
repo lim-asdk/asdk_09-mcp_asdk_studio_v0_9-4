@@ -62,7 +62,8 @@ Workflow:
 3. Fill in `Command` and `Arguments` for `stdio`, or `URL` for `http` / `sse`.
 4. Leave `Headers` blank unless authentication is required.
 5. Click **Test Connection**.
-6. Click **Save & Restart** when the server is ready.
+6. A healthy connection should return the server's tool list.
+7. Click **Save & Restart** when the server is ready.
 
 ## 4. How The Studio Reads Your Setup
 
