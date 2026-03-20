@@ -51,7 +51,7 @@ def check_mcp_config():
         logger.info("[INFO] No mcp_config.json found. System will run in standalone mode.")
 
 if __name__ == "__main__":
-    logger.info("=== MCP ASDK Studio v1 Health Diagnostics ===\n")
+    logger.info("=== MCP ASDK Studio v0.9-4 (Public Beta) Health Diagnostics ===\n")
     check_environment()
     check_dependencies()
     check_mcp_config()

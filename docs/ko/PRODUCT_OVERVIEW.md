@@ -21,27 +21,21 @@ ASDK Studio는 **5계층 아키텍처 (L1-L5)**를 따릅니다:
 
 ---
 
-## 🌟 **지능형 실증 쇼케이스: AAPL(애플) 종합 분석**
-> 💡 **"우리가 만든 MCP 서버는 타 서비스와 달리, <span style="color: #e11d48; font-size: 1.25em;">'지금 이 순간'의 실시간 데이터</span>를 팩트로 분석합니다."**
+## 🌟 **실제 실행 결과 예시**
+ASDK Studio는 단순한 컨셉 UI가 아닙니다. 실제 MCP 서버에 연결하여 사용 가능한 툴 목록을 노출하고, 질문 입력 후 시세, 차트, 공시, 뉴스, 요약 결과를 하나의 워크스페이스 안에서 누적·검토할 수 있습니다.
 
-ASDK Studio의 핵심은 단순한 정보 요약이 아닙니다. 과거의 학습 데이터가 아닌, <span style="color: #e11d48; font-weight: bold; font-size: 1.1em;">🚀 초단위 실시간(Real-time) 데이터</span>를 **"환각 없이"** 결합하여 강력한 통찰을 제공하는 것입니다.
+또한 각 tool 결과는 개별적으로 펼쳐 확인할 수 있으며, raw JSON 복사를 통해 검증 가능한 분석 흐름을 제공합니다.
 
-### 🛡️ **1. <span style="color: #e11d48;">실시간(Real-time)</span> 시세 기반의 강력한 팩트 체크**
-AI의 추측은 이제 그만. **AllOne_Total_V2** (실시간 시세), **News_MCP_V3** (뉴스/공시), **stack_helper_api** (고급 지표) 서버가 <span style="color: #2563eb; font-weight: bold;">실시간으로 동기화</span>되어 데이터의 정합성을 AI가 즉시 교차 검증합니다.
+![실제 서버 연결](file:///C:/program_files/Lim%20Workspace/mcp_asdk_studio_v1/docs/assets/real-output-01-live-servers.png)
+**실제 연결된 서버 및 툴 목록이 UI에 투명하게 공개됨**
 
-![AAPL Showcase 1](../assets/showcase_aapl_1.png)
-*▲ **[기술적 & 재무적 통합]** <span style="color: #e11d48; font-weight: bold;">실시간 시세</span>, 기술적 지표, 그리고 SEC 10-Q 보고서 데이터를 AI가 한순간의 환각 없이 결합하여 브리핑합니다.*
+![분석 결과](file:///C:/program_files/Lim%20Workspace/mcp_asdk_studio_v1/docs/assets/real-output-02-analysis-flow.png)
+**다양한 MCP 툴 호출 결과가 누적형으로 제공되는 지능형 분석 화면**
 
-### 🔍 **2. 딥 컴플라이언스 & <span style="color: #e11d48;">실시간</span> 뉴스 감정 분석**
-수백 페이지의 SEC 공시 서류를 AI가 직접 읽고 분석함과 동시에, <span style="color: #e11d48; font-weight: bold;">지금 쏟아지는 실시간 뉴스</span>의 긍정/부정을 수치화하여 시장의 흐름을 팩트에 기반해 요약합니다.
+![Raw 데이터 검증](file:///C:/program_files/Lim%20Workspace/mcp_asdk_studio_v1/docs/assets/real-output-03-raw-results.png)
+**종합 의견과 함께 Raw 결과를 즉시 확인하고 검증 가능 (Copy JSON 지원)**
 
-![AAPL Showcase 2](../assets/showcase_aapl_2.png)
-*▲ **[공시 & 뉴스 통합]** 최근 10건의 SEC 공시 히스토리와 <span style="color: #e11d48; font-weight: bold;">실시간 글로벌 뉴스</span>의 센티먼트를 AI가 융합하여 입체적인 시각을 제공합니다.*
-
-### 🏆 **ASDK Studio만이 가능한 "진짜 실시간" 분석:**
-- 🔴 **LIVE 실시간 데이터 동기화**: 과거 학습 데이터에 의존하지 않고, **지금 이 순간의 시장 데이터**를 즉시 가져와 분석합니다.
-- 🚫 **Zero Hallucination**: AI의 추측이 아닌, 실제 전문 서버가 반환한 **Raw Data**를 바탕으로 요약하여 <span style="color: #2563eb;">**신뢰도 100%**</span>에 도전합니다.
-- 🤖 **멀티 서버 오케스트레이션**: 서로 다른 데이터 소스를 하나의 지응형 엔진으로 통합하는 독보적인 기술을 경험해 보세요.
+> **"설명용 화면이 아니라, 실제로 작동 중인 분석 워크스페이스입니다."**
 
 ---
 

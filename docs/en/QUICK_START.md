@@ -1,6 +1,6 @@
 # Quick Start Guide (English)
 
-Follow these steps to get MCP ASDK Studio v1 up and running on your local machine.
+Follow these steps to get MCP ASDK Studio v0.9-4 (Public Beta) up and running on your local machine.
 
 ## 1. Prerequisites
 - Python 3.10 or higher.

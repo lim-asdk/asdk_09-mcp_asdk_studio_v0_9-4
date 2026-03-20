@@ -1,5 +1,5 @@
 """
-[MAIN.PY] - MCP ASDK Studio v1 발사대 (Launcher)
+[MAIN.PY] - MCP ASDK Studio v0.9-4 (Public Beta) 발사대 (Launcher)
 -----------------------------------------------------------
 이 파일은 MCP ASDK Studio 프로그램을 시작하는 '스위치'입니다.
 로켓을 발사하듯, 필요한 연료(Pack)와 엔진(Engine)을 점검하고
@@ -64,7 +64,7 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s [%(levelname)s] %(na
 logger = logging.getLogger("ASDK.Pro.Launcher")
 
 def main():
-    logger.info("Initializing MCP ASDK Studio v1.0 (V5-D-10)...")
+    logger.info("Initializing MCP ASDK Studio v0.9-4 (Public Beta) (V5-D-10)...")
 
     # ----------------------------------------------------------------
     # 단계 1: 지능 팩(IQ-Pack) 선택
@@ -109,7 +109,7 @@ def main():
     # 단계 4: 창 띄우기 (Launch)
     # ----------------------------------------------------------------
     window = webview.create_window(
-        title=f"💎 MCP ASDK Studio v1 [{display_mode}]",
+        title=f"💎 MCP ASDK Studio v0.9-4 (Public Beta) [{display_mode}]",
         url=start_url,
         js_api=api,
         width=1280,

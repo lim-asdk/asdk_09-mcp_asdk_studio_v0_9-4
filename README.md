@@ -7,20 +7,28 @@
 ![MCP Server Setup](docs/assets/mcp_setup.png)
 *Professional Setup Interface: Connect local scripts, configure AI profiles, or remote SSE servers with ease.*
 
-## 🚀 Live Intelligence Showcase: AAPL Deep Analysis
+## What Real Usage Looks Like
+MCP ASDK Studio is not just a concept UI.
 
-Experience the power of multi-server orchestration. ASDK Studio combines data from **AllOne_Total_V2** (Stock Metrics), **News_MCP_V3** (SEC/News), and **stack_helper_api** (Intelligence) to provide professional-grade insights.
+It connects to real MCP servers, exposes visible tool inventories, and generates structured outputs across multiple sources such as price, charts, filings, news, and summaries.
 
-### Comprehensive Financial Intelligence
-ASDK Studio doesn't just show prices; it cross-references real-time market data with SEC filings and news sentiment to provide a 360-degree view.
+Typical workflow:
+1. **Connect** MCP servers
+2. **Inspect** available tools
+3. **Ask** a ticker or domain question
+4. **Review** the combined analysis
+5. **Expand** raw tool results for verification
 
-![AAPL Analysis 1](docs/assets/showcase_aapl_1.png)
-*Summary, Technicals, and Financial Highlights from SEC 10-Q*
+![Live Servers](docs/assets/real-output-01-live-servers.png)
+**Live MCP server connections and tool inventory**
 
-![AAPL Analysis 2](docs/assets/showcase_aapl_2.png)
-*Detailed SEC Filing History and News Sentiment Analysis*
+![Analysis Flow](docs/assets/real-output-02-analysis-flow.png)
+**Structured multi-tool analysis inside the workspace**
 
-**MCP ASDK Studio is a 100% Free, Open-Source AI development workspace.**
+![Raw Results](docs/assets/real-output-03-raw-results.png)
+**Expandable raw outputs for inspection and verification**
+
+**MCP ASDK Studio is a 100% Free, Open-Source AI development workspace. (v0.9-4 Public Beta)**
 *Actual Product UI - Experience the premium 'Lim Chat PRO' engine for free.*
 
 ---

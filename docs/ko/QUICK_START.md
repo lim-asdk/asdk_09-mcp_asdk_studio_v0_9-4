@@ -1,6 +1,6 @@
 # 빠른 시작 가이드 (Korean)
 
-로컬 환경에서 MCP ASDK Studio v1을 시작하려면 아래 단계를 따르세요.
+로컬 환경에서 MCP ASDK Studio v0.9-4 (Public Beta)을 시작하려면 아래 단계를 따르세요.
 
 ## 1. 사전 요구 사항
 - Python 3.10 이상.
