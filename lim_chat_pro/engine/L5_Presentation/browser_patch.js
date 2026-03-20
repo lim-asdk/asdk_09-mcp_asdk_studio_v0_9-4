@@ -29,5 +29,8 @@
                 }
             })
         };
+
+        // Fire the ready event for browser mode
+        window.dispatchEvent(new Event('pywebviewready'));
     }
 })();

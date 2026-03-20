@@ -1073,30 +1073,49 @@
         let profiles = [];
         let servers = {};
 
-        function initialize() {
+        async function initialize() {
             api = window.pywebview?.api;
             if (!api || typeof api.get_tools !== 'function') {
-                setTimeout(initialize, 200);
+                setTimeout(initialize, 500);
                 return;
             }
-            initData();
-            setInterval(updateServerStatus, 5000);
+
+            try {
+                // [V5 Async] Early-Check: Verify if bridge is fully ready (beyond 503)
+                await api.get_server_status();
+                initData();
+                setInterval(updateServerStatus, 5000);
+            } catch (e) {
+                // If 503 error occurs, bridge is still warming up. Retry.
+                console.warn("[ASDK] Engine Warming Up... Retrying connection.");
+                setTimeout(initialize, 1000);
+            }
         }
 
         window.addEventListener('pywebviewready', () => { setTimeout(initialize, 100); });
+        
+        // [Browser Mode Support] If already ready (e.g., via browser_patch.js), trigger init
+        if (window.pywebview && window.pywebview.api) {
+            setTimeout(initialize, 500);
+        }
 
         async function initData() {
             updateServerModeLabel();
             const serverToggle = document.getElementById('server-mode-check');
             if (serverToggle) serverToggle.addEventListener('change', updateServerModeLabel);
 
-            await updateServerStatus();
-            if (serverToggle?.checked) await loadTools();
-            await loadHistoryList();
-            await loadProfiles();
-            await loadServerList();
-            await loadPersonas();
-            await loadSystemSettings();
+            // [Resilience] Sequential load with independent error handling
+            const loadStep = async (fn, name) => {
+                try { await fn(); } catch (e) { console.error(`[Init] ${name} failed:`, e); }
+            };
+
+            await loadStep(updateServerStatus, "Server Status");
+            if (serverToggle?.checked) await loadStep(loadTools, "Tools");
+            await loadStep(loadHistoryList, "History");
+            await loadStep(loadProfiles, "Profiles");
+            await loadStep(loadServerList, "Server List");
+            await loadStep(loadPersonas, "Personas");
+            await loadStep(loadSystemSettings, "System Settings");
         }
 
         async function updateServerStatus() {

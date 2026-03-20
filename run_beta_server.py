@@ -36,20 +36,35 @@ logger = logging.getLogger("ASDK.GlobalHub")
 BRIDGE = None
 
 # --- DYNAMIC IMPORTS & RUNTIME SETUP ---
-def setup_runtime():
-    """Path resolution logic."""
-    root = Path(__file__).resolve().parent
-    if not (root / "lim_chat_pro").exists():
-        for i in range(3):
-            if (root.parents[i] / "lim_chat_pro").exists():
-                root = root.parents[i]
-                break
-    if str(root) not in sys.path: sys.path.insert(0, str(root))
-    engine_path = root / "lim_chat_pro" / "engine"
-    if str(engine_path) not in sys.path: sys.path.insert(0, str(engine_path))
-    return root
+def setup_paths():
+    """Matches main.py logic for consistent path resolution."""
+    current_path = Path(__file__).resolve()
+    found_root = None
+    for i in range(5):
+        parent = current_path.parents[i]
+        if (parent / "lim_chat_pro").exists():
+            found_root = parent
+            break
+    if not found_root:
+        found_root = Path(__file__).resolve().parent
 
-ROOT_PATH = setup_runtime()
+    project_root = found_root
+    package_dir = project_root / "lim_chat_pro"
+    
+    if str(project_root) not in sys.path:
+        sys.path.insert(0, str(project_root))
+        
+    engine_dir = package_dir / "engine"          
+    if str(engine_dir) not in sys.path:
+        sys.path.insert(0, str(engine_dir))
+    return project_root
+
+ROOT_PATH = setup_paths()
+os.chdir(ROOT_PATH) # Ensure working directory is root
+
+# Now import engine components
+from lim_chat_pro import get_available_packs
+from L1_Infrastructure.path_manager import PathManager
 
 def kill_existing_port(port):
     """Ultra-fast port cleaning."""
@@ -141,8 +156,24 @@ def start_hub():
         global BRIDGE
         try:
             logger.info("[ASYNC] Loading L3 Orchestration Bridge...")
+            
+            # --- Pack Selection (Sync with main.py) ---
+            packs = get_available_packs()
+            active_pack = None
+            if "stock_pro" in packs:
+                active_pack = "stock_pro"
+            elif packs:
+                active_pack = packs[0]
+                
+            if active_pack:
+                logger.info(f"[BOOT] Activating Intelligence Pack: {active_pack}")
+                PathManager.set_active_pack(active_pack)
+            else:
+                logger.info("[BOOT] No IQ-Pack found. Using default mode.")
+            # ------------------------------------------
+
             # Late-import to avoid boot delay
-            from lim_chat_pro.engine.L3_Orchestration.pro_bridge_api import ProBridgeAPI
+            from L3_Orchestration.pro_bridge_api import ProBridgeAPI
             BRIDGE = ProBridgeAPI()
             logger.info("[SUCCESS] Bridge Active. All MCP Servers Synced.")
         except Exception as e:
