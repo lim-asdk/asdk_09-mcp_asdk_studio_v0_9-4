@@ -80,6 +80,7 @@ Get the system running in 4 easy steps:
 ---
 ## 📖 Documentation
 - [Quick Start Guide (EN)](docs/en/QUICK_START.md) / [빠른 시작 (KO)](docs/ko/QUICK_START.md)
+- [English Setup Guide](docs/en/SETUP_GUIDE.md)
 - [Auth Setup Guide](keys/README_AUTH.md)
 - [Public Release & AI Optimization Guide](docs/RELEASE_GUIDE_V5.md)
 - [Development Reports](docs/reports/개발_진행_상황.md)

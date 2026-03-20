@@ -1,38 +1,21 @@
-# MCP ASDK Studio v1
+# Public README
 
-💎 **Advanced Intelligence Edition with Vertical AI capabilities.**
+This repository is a developer-first AI + MCP workspace skeleton.
 
-General purpose AI Council Chamber & MCP Development Studio migrated from Lim Chat Pro.
+## Start Here
 
-## Features
-- **General Studio Mode**: No more pack dependencies. Standalone execution.
-- **MCP Integration**: Seamlessly connect to Model Context Protocol servers.
-- **Persona Management**: Custom AI profiles located in `user_data/profiles`.
-- **Vertical AI**: Powerful reasoning engine based on L1-L5 layered architecture.
+1. Read the full setup guide: [docs/en/SETUP_GUIDE.md](../en/SETUP_GUIDE.md)
+2. If you only need the shortest path, use: [docs/en/QUICK_START.md](../en/QUICK_START.md)
+3. Keep private settings in `user_data/` and out of Git.
 
-## Installation & Setup
-1. **Clone the repository**:
-   ```bash
-   git clone https://github.com/lim-asdk/mcp_asdk_studio_v1.git
-   ```
-2. **Setup Environment**:
-   - Create your AI profile in `user_data/profiles/your_persona.json`.
-   - Add your API keys to the profile (Grok, OpenAI, etc.).
-3. **Launch**:
-   ```bash
-   python main.py
-   ```
+## What It Shows
 
-## Folder Structure
-- `apps/`: UI logic and Entry points.
-- `lim_chat_pro/`: Core engine package.
-- `servers/`: Bundled MCP server scripts.
-- `user_data/`: Local settings (Git excluded).
-- `docs/`: Guides and technical documentation.
+- AI profile setup
+- MCP server setup
+- Desktop and web launchers
+- Local-first storage for secrets and profiles
 
-## Security
-- All sensitive keys are stored in `user_data/` which is excluded from Git.
-- Never commit your `*.local.json` or `.env` files.
+## Public Repo Rule
 
----
-Developed by **lim_hwa_chan**
+- Screenshots should hide API keys, bearer tokens, and private paths.
+- `http` and `sse` servers do not need headers unless the target endpoint requires authentication.
