@@ -86,3 +86,26 @@ Get the system running in 4 easy steps:
 - [Development Reports](docs/reports/개발_진행_상황.md)
 
 © 2026 **lim_hwa_chan**. Released for the community.
+## ?? Future Blueprint: V6 Matrix System & APLC Architecture
+
+While this v0.9-4 Public Beta provides a robust desktop-first workspace, it is fundamentally the stepping stone towards the **V6 Matrix System**?an infinitely scalable, multi-surface intelligence architecture. Future updates will transition this single-instance studio into a decentralized **APLC (AI Program Logic Controller)** network.
+
+Here is the architectural roadmap for upcoming iterations:
+
+### 1. Room-Based Infinite Expansion
+We are shifting from standard software logic to hardware-like intelligence orchestration.
+* **Zero-Code Cloning**: Scaling the system will be as simple as copying the `room_01` directory to `room_02`, `room_03`, etc.
+* **Component Isolation**: Each "Room" acts as an independent memory module (RAM), capable of housing different models (GPT-4, Claude, Gemini) or distinct API keys. This guarantees maximum stability, akin to plugging parallel hardware components from different manufacturers into a single motherboard.
+
+### 2. Cool Fail-over & The MMU Router
+The routing mechanism will no longer process complex AI states. It will operate purely as a high-speed delivery protocol.
+* **Blind Delivery Protocol**: If a Room fails to respond, the Router instantly drops the payload into the adjacent Room's inbox. The system never halts.
+* **MMU-Style Health Sweeps**: On boot, the system conducts a comprehensive sweep of all Rooms, assigning strict `[Healthy]` or `[Bad]` labels. The Router functions like a Memory Management Unit (MMU), delivering data only to verified `[Healthy]` addresses.
+
+### 3. Multi-Surface Architecture
+The system will be physically divided into isolated operational planes:
+* **User Surface**: A hyper-simplified UI for final outputs.
+* **Operator Surface**: For system monitoring, prompt orchestration, and overriding AI actions.
+* **Developer Surface**: The core logic and routing manipulation plane.
+
+> **Note to Contributors:** All future pull requests and feature proposals must align with the **Pointer-Only** principle (passing coordinates, not duplicating data) and the physical isolation of the L1-L4 intelligence layers.
