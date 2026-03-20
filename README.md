@@ -7,6 +7,19 @@
 ![MCP Server Setup](docs/assets/mcp_setup.png)
 *Professional Setup Interface: Connect local scripts, configure AI profiles, or remote SSE servers with ease.*
 
+## 🚀 Live Intelligence Showcase: AAPL Deep Analysis
+
+Experience the power of multi-server orchestration. ASDK Studio combines data from **AllOne_Total_V2** (Stock Metrics), **News_MCP_V3** (SEC/News), and **stack_helper_api** (Intelligence) to provide professional-grade insights.
+
+### Comprehensive Financial Intelligence
+ASDK Studio doesn't just show prices; it cross-references real-time market data with SEC filings and news sentiment to provide a 360-degree view.
+
+![AAPL Analysis 1](docs/assets/showcase_aapl_1.png)
+*Summary, Technicals, and Financial Highlights from SEC 10-Q*
+
+![AAPL Analysis 2](docs/assets/showcase_aapl_2.png)
+*Detailed SEC Filing History and News Sentiment Analysis*
+
 **MCP ASDK Studio is a 100% Free, Open-Source AI development workspace.**
 *Actual Product UI - Experience the premium 'Lim Chat PRO' engine for free.*
 
@@ -63,15 +76,4 @@ Get the system running in 4 easy steps:
 - [Public Release & AI Optimization Guide](docs/RELEASE_GUIDE_V5.md)
 - [Development Reports](docs/reports/개발_진행_상황.md)
 
----
-© 2026 **lim_hwa_chan**. Released for the community.
-
-## 📂 Core Principles
-- **Open for Innovation**: This is a "Practice-Ready" environment. We encourage you to **modify the code with AI** and share your improvements.
-- **Layered Stability**: Robust performance via the L1-L5 engine structure.
-
-## 🔒 Security & Privacy
-We prioritize your privacy. No API keys or personal paths are stored in the code. Users must manually manage their keys in the `user_data/` folder.
-
----
 © 2026 **lim_hwa_chan**. Released for the community.

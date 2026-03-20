@@ -12,7 +12,9 @@
 
 import os
 import sys
-import webview  # 화면(창)을 띄우는 라이브러리
+import webview  # 필요 패키지: pywebview, qtpy, PyQt6-WebEngine, mcp, openai
+               # Python 3.14이면 pythonnet314-whl도 추가 필요
+               # 예: python -m pip install pywebview qtpy PyQt6-WebEngine mcp openai pythonnet314-whl
 import logging  # 작동 기록을 남기는 라이브러리
 from pathlib import Path
 
@@ -119,7 +121,7 @@ def main():
     
     api.set_window(window)
     
-    webview.start(debug=False)
+    webview.start(gui='qt', debug=False)  # Qt 백엔드 사용
 
 if __name__ == "__main__":
     main()
