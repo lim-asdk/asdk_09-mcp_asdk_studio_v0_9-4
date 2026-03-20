@@ -3,6 +3,8 @@ import threading
 import logging
 import os
 import json
+import subprocess
+from urllib.parse import urlparse
 from typing import Optional, List
 from mcp import ClientSession, StdioServerParameters
 from mcp.client.stdio import stdio_client
@@ -29,6 +31,9 @@ class McpClientHandler:
         self.error_msg = ""
         self._stop_event = asyncio.Event()
         self._last_connect_ts = 0.0
+        # When an SSE/HTTP entry points at localhost, the handler may launch
+        # the backing MCP script itself and keep the process handle here.
+        self._proc = None
 
         retry_cfg = server_config.get("retry", {}) if isinstance(server_config, dict) else {}
         self._max_retries = int(retry_cfg.get("max_retries", 0))  # 0 = infinite
@@ -52,6 +57,19 @@ class McpClientHandler:
             # 루프에 종료 시그널 전달
             self._loop.call_soon_threadsafe(self._stop_event.set)
 
+        if getattr(self, "_proc", None):
+            try:
+                if self._proc.poll() is None:
+                    self._proc.terminate()
+                    try:
+                        self._proc.wait(timeout=5)
+                    except subprocess.TimeoutExpired:
+                        self._proc.kill()
+            except Exception:
+                pass
+            finally:
+                self._proc = None
+
     def _run_loop(self):
         self._loop = asyncio.new_event_loop()
         asyncio.set_event_loop(self._loop)
@@ -69,6 +87,9 @@ class McpClientHandler:
                 if transport_type == "stdio":
                     await self._connect_stdio()
                 elif transport_type in ["sse", "http"]:
+                    # Local HTTP/SSE entries still carry command/args so the
+                    # handler can start the backing process before connecting.
+                    self._launch_local_sse_server_if_needed()
                     await self._connect_sse()
                 else:
                     raise ValueError(f"Unknown transport type: {transport_type}")
@@ -137,6 +158,78 @@ class McpClientHandler:
         async with sse_client(url=url, headers=headers) as (read, write):
             async with ClientSession(read, write) as session:
                 await self._manage_session(session)
+
+    def _build_launch_spec(self):
+        """Prepare the command/env/cwd bundle used by local Python-script servers.
+
+        This mirrors the stdio path resolution rules so the same JSON config can
+        be reused for normal startup and "Test Connection" flows.
+        """
+        cmd = self.server_config.get("command", "python")
+        args = self.server_config.get("args", [])
+        env = os.environ.copy()
+        env["PYTHONUNBUFFERED"] = "1"
+        env.update(self.server_config.get("env", {}))
+
+        resolved_args = []
+        for arg in args:
+            if arg.endswith(".py") and not os.path.isabs(arg):
+                abs_path = os.path.join(self.project_root, arg)
+                resolved_args.append(abs_path if os.path.exists(abs_path) else arg)
+            else:
+                resolved_args.append(arg)
+
+        cwd = None
+        for arg in resolved_args:
+            if arg.endswith(".py") and os.path.exists(arg):
+                cwd = os.path.dirname(arg)
+                break
+
+        if cwd:
+            env["PYTHONPATH"] = cwd + os.pathsep + env.get("PYTHONPATH", "")
+
+        return cmd, resolved_args, env, cwd
+
+    def _launch_local_sse_server_if_needed(self):
+        """Launch local HTTP/SSE servers that are configured with command/args.
+
+        The Studio JSON keeps the command here so the handler can start the
+        backing process automatically. Remote-only endpoints can omit command.
+        Only loopback URLs are auto-launched to avoid spawning processes for
+        true remote endpoints.
+        """
+        transport_type = self.server_config.get("transport", "stdio").lower()
+        if transport_type not in ["sse", "http"]:
+            return
+
+        url = self.server_config.get("url", "")
+        if not url:
+            return
+
+        parsed = urlparse(url)
+        if parsed.hostname not in {"127.0.0.1", "localhost", "::1"}:
+            return
+
+        if getattr(self, "_proc", None) and self._proc.poll() is None:
+            return
+
+        command = self.server_config.get("command")
+        args = self.server_config.get("args", [])
+        if not command or not args:
+            return
+
+        cmd, resolved_args, env, cwd = self._build_launch_spec()
+        creationflags = getattr(subprocess, "CREATE_NO_WINDOW", 0) if os.name == "nt" else 0
+
+        self._proc = subprocess.Popen(
+            [cmd, *resolved_args],
+            cwd=cwd,
+            env=env,
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+            creationflags=creationflags,
+        )
+        logger.info(f"[{self.name}] Launched local SSE server for {url}")
 
     async def _manage_session(self, session):
         """세션 초기화 및 유지 공통 로직"""

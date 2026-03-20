@@ -608,6 +608,8 @@ class LimChatBridgeAPI:
 
     def save_server_config(self, name, command, args_str, transport="stdio", url=None, headers_str=None, display_name=None):
         """[UI] 서버 설정을 저장하고 재시작합니다 (Transport 지원 추가)."""
+        # Test Connection should mirror the saved server definition closely so
+        # local SSE/HTTP entries exercise the same launch path as real startup.
         args = [a.strip() for a in args_str.split('\n') if a.strip()]
         
         # 헤더 파싱 (Key=Value 형태)
@@ -710,6 +712,8 @@ class LimChatBridgeAPI:
         # Preserve existing env from JSON if available (for test_temp)
         # For temporary tests, we might not have a saved config yet, 
         # but if we do, we should use its env.
+        # HTTP/SSE entries keep command/args so the handler can auto-launch a
+        # local backing server before connecting to the /sse endpoint.
         existing_conf = self._config_manager.config.get("mcpServers", {}).get(display_name or "Test Server", {})
         env = existing_conf.get("env", {}).copy()
         
@@ -731,6 +735,10 @@ class LimChatBridgeAPI:
         temp_name = "test_temp"
         project_root = PathManager.PROJECT_ROOT
         client = McpClientHandler(temp_name, temp_config, project_root)
+        last_error = None
+        # A localhost SSE/HTTP target can emit transient connection failures
+        # while its backing process is still binding the port.
+        remote_transport = transport.lower() in ("sse", "http")
         
         try:
             client.start()
@@ -747,8 +755,16 @@ class LimChatBridgeAPI:
                         })
                     return {"ok": True, "status": "connected", "tools": tools}
                 if client.status == "error":
+                    # SSE/HTTP entries may still be starting their backing local
+                    # process, so we keep waiting until the timeout instead of
+                    # failing on the first transient connection error.
+                    if remote_transport:
+                        last_error = client.error_msg or "Unknown Error"
+                        continue
                     return {"ok": False, "message": client.error_msg or "Unknown Error"}
             
+            if last_error:
+                return {"ok": False, "message": f"Connection Timeout: Server did not respond in 10s ({last_error})"}
             return {"ok": False, "message": "Connection Timeout: Server did not respond in 10s"}
         except Exception as e:
             return {"ok": False, "message": str(e)}
